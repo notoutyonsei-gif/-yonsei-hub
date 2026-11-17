@@ -1,0 +1,3162 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>연세 스포츠 허브 · 낫아웃</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0b2a5b; --navy-2:#123a7a; --blue:#1f5fbf; --sky:#e8f0fc;
+    --green:#17683a; --green-2:#2e9e5b; --mint:#e6f4ea;
+    --ink:#14213d; --muted:#5b6b85; --line:#dfe6f1; --bg:#f5f7fb; --card:#fff;
+    --win:#1f9d55; --lose:#d64545; --draw:#8a94a6;
+    --ok:#1f9d55; --no:#d64545; --entry:#1f5fbf; --live:#e5383b;
+    --radius:16px; --shadow:0 2px 10px rgba(11,42,91,.07);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{font-family:"Noto Sans KR",system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;-webkit-font-smoothing:antialiased}
+  a{color:inherit}
+  button{font:inherit;cursor:pointer}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+
+  /* ---------- header ---------- */
+  header{background:var(--navy);color:#fff;position:sticky;top:0;z-index:20}
+  .hbar{display:flex;align-items:center;gap:16px;height:60px}
+  .logo{display:flex;align-items:center;gap:10px;font-weight:900;letter-spacing:-.02em;font-size:18px;text-decoration:none;white-space:nowrap}
+  .logo .mark{width:30px;height:30px;border-radius:8px;background:#fff;color:var(--navy);display:grid;place-items:center;font-size:15px}
+  .logo small{font-weight:500;opacity:.7;font-size:12px;margin-left:2px}
+  nav.tabs{display:flex;gap:4px;margin-left:auto;overflow-x:auto;scrollbar-width:none}
+  nav.tabs::-webkit-scrollbar{display:none}
+  nav.tabs a{padding:8px 13px;border-radius:999px;text-decoration:none;font-size:14px;font-weight:500;white-space:nowrap;opacity:.8}
+  nav.tabs a:hover{opacity:1;background:rgba(255,255,255,.08)}
+  nav.tabs a.on{background:#fff;color:var(--navy);opacity:1;font-weight:700}
+  nav.tabs a.hot::after{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:#ffcf33;margin-left:5px;vertical-align:2px}
+  @media (max-width:760px){
+    .wrap{padding:0 14px}
+    .hbar{height:auto;flex-wrap:wrap;padding:10px 0 8px;gap:6px}
+    nav.tabs{margin-left:0;width:100%}
+    nav.tabs a{padding:7px 11px;font-size:13px}
+    .logo small{display:none}
+  }
+
+  .sample-note{background:#fff8e1;border-bottom:1px solid #f3e2a6;color:#7a5a00;font-size:13px}
+  .sample-note .wrap{padding-top:8px;padding-bottom:8px}
+
+  main{padding:24px 0 60px}
+  section.view{display:none}
+  section.view.on{display:block}
+  h2.sec{font-size:22px;font-weight:900;letter-spacing:-.02em;margin:0 0 4px}
+  p.sub{color:var(--muted);margin:0 0 16px;font-size:14px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+  .pill{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:700;padding:3px 9px;border-radius:999px;background:var(--sky);color:var(--navy);white-space:nowrap}
+  .pill.yk{background:var(--navy);color:#fff}
+  .pill.lg{background:var(--mint);color:var(--green)}
+  .seg{display:inline-flex;background:#e9eef7;border-radius:999px;padding:4px;gap:2px;flex-wrap:wrap}
+  .seg button{border:0;background:transparent;padding:7px 13px;border-radius:999px;font-size:13px;font-weight:500;color:var(--muted);white-space:nowrap}
+  .seg button.on{background:#fff;color:var(--navy);font-weight:700;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+  .seg.scroll{display:flex;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;max-width:100%}
+  .seg.scroll::-webkit-scrollbar{display:none}
+  .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:16px}
+  input.search,select{border:1px solid var(--line);background:#fff;border-radius:10px;padding:9px 12px;font:inherit;font-size:14px;color:var(--ink)}
+  input.search{min-width:200px;flex:1;max-width:320px}
+
+  /* 버튼(누를 수 있음)과 안내(누를 수 없음)를 시각적으로 분명히 구분 */
+  .btn{display:inline-flex;align-items:center;gap:6px;border:0;border-radius:10px;padding:9px 14px;font-weight:700;font-size:13px;text-decoration:none;white-space:nowrap;cursor:pointer}
+  .btn::after{content:"›";font-size:16px;line-height:1;margin-left:2px;opacity:.8}
+  .btn.noarrow::after{content:none}
+  .btn.blue{background:var(--blue);color:#fff}
+  .btn.white{background:#fff;color:var(--navy)}
+  .btn.ghost{background:rgba(255,255,255,.14);color:#fff}
+  .btn.line{background:#fff;color:var(--navy);border:1.5px solid var(--blue)}
+  .btn.soft{background:var(--sky);color:var(--navy)}
+  .btn.sm{padding:6px 10px;font-size:12px;border-radius:8px}
+  .info{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--muted);font-weight:500;white-space:nowrap}
+  .info b{color:var(--ink);font-weight:700}
+  .info.onDark{color:rgba(255,255,255,.85)}
+  .info.onDark b{color:#fff}
+
+  /* ---------- home ---------- */
+  .hero{display:grid;grid-template-columns:1.4fr 1fr;gap:16px;margin-bottom:22px}
+  .next{background:linear-gradient(135deg,var(--navy),var(--navy-2) 60%,var(--blue));color:#fff;border-radius:20px;padding:22px 24px;position:relative;overflow:hidden;display:flex;flex-direction:column;gap:6px}
+  .next.lg{background:linear-gradient(135deg,#0f4a2a,#17683a 60%,#2e9e5b)}
+  .next::after{content:"";position:absolute;right:-70px;top:-70px;width:230px;height:230px;border-radius:50%;border:34px solid rgba(255,255,255,.06);pointer-events:none}
+  .next .row1{display:flex;align-items:center;justify-content:space-between;gap:10px;position:relative;z-index:1}
+  .next .lbl{font-size:12px;font-weight:700;letter-spacing:.04em;background:rgba(255,255,255,.16);padding:4px 10px;border-radius:999px}
+  .next .dday{font-weight:900;font-size:22px;letter-spacing:-.02em;background:#fff;color:var(--navy);padding:2px 12px;border-radius:10px}
+  .next.lg .dday{color:var(--green)}
+  .next .match{font-size:26px;font-weight:900;letter-spacing:-.03em;margin-top:6px;line-height:1.25;position:relative;z-index:1}
+  .next .meta{opacity:.88;font-size:14px;position:relative;z-index:1}
+  .next .acts{display:flex;gap:8px;flex-wrap:wrap;align-items:center;padding-top:10px;position:relative;z-index:1}
+  .portals{display:grid;grid-template-rows:1fr 1fr;gap:12px}
+  .portal{border-radius:18px;padding:16px 18px;display:flex;align-items:center;gap:14px;border:2px solid transparent;transition:transform .15s;cursor:pointer;text-align:left;background:#fff;color:inherit}
+  .portal:hover{transform:translateY(-2px)}
+  .portal .ic{flex:none;width:46px;height:46px;border-radius:14px;display:grid;place-items:center;font-size:22px}
+  .portal h3{margin:0;font-size:17px;font-weight:900;letter-spacing:-.02em}
+  .portal p{margin:2px 0 0;font-size:12.5px;color:var(--muted);line-height:1.45}
+  .portal.yk{border-color:var(--navy)} .portal.yk .ic{background:var(--navy);color:#fff} .portal.yk h3{color:var(--navy)}
+  .portal.lg{border-color:var(--green-2)} .portal.lg .ic{background:var(--mint)} .portal.lg h3{color:var(--green)}
+  .portal.active{box-shadow:0 0 0 4px rgba(31,95,191,.15)}
+  .portal .arrow{margin-left:auto;font-size:18px;color:var(--muted)}
+  @media (max-width:820px){.hero{grid-template-columns:1fr}.portals{grid-template-columns:1fr 1fr;grid-template-rows:auto}}
+  @media (max-width:520px){
+    .portals{grid-template-columns:1fr 1fr;gap:8px}
+    .portal{padding:10px 12px;gap:8px}.portal .ic{width:32px;height:32px;font-size:16px;border-radius:10px}
+    .portal h3{font-size:14px;white-space:nowrap}.hide-m{display:none}.portal p,.portal .arrow{display:none}
+    .next{padding:18px}.next .match{font-size:21px}
+  }
+
+  .home-grid{display:grid;grid-template-columns:1.6fr 1fr;gap:16px}
+  @media (max-width:900px){.home-grid{grid-template-columns:1fr}}
+  .sched-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:16px 18px 10px}
+  .sched-head h3{margin:0;font-size:17px;font-weight:900}
+  .grp-h{display:flex;align-items:center;gap:8px;padding:10px 18px;font-size:13px;font-weight:900;border-top:1px solid var(--line)}
+  .grp-h.yk{background:#eef2fa;color:var(--navy)}
+  .grp-h.lg{background:#f0f8f2;color:var(--green)}
+  .grp-h small{font-weight:500;color:var(--muted)}
+  .game{display:grid;grid-template-columns:64px 1fr auto;gap:12px;align-items:center;padding:12px 18px 12px 14px;border-top:1px solid var(--line);border-left:5px solid transparent}
+  .game.yk{border-left-color:var(--navy)}
+  .game.lg{border-left-color:var(--green-2)}
+  .game .date{text-align:center}
+  .game .date b{display:block;font-size:18px;font-weight:900;line-height:1.1}
+  .game .date span{font-size:11.5px;color:var(--muted)}
+  .game .t{font-weight:700;font-size:15px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+  .game .m{font-size:12.5px;color:var(--muted);margin-top:1px}
+  .game .right{display:flex;flex-direction:column;align-items:flex-end;gap:5px}
+  .game .dd{font-size:12px;font-weight:900;color:var(--blue)}
+  .game.lg .dd{color:var(--green)}
+  .game .acts{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+  @media (max-width:560px){
+    .sched-head{padding:14px 14px 8px}
+    .game{grid-template-columns:46px 1fr;gap:4px 10px;padding:9px 12px 9px 9px}
+    .game .date b{font-size:15px}
+    .game .date span{font-size:10.5px}
+    .game .t{font-size:14px}
+    .game .m{font-size:11.5px}
+    .game .right{grid-column:2;flex-direction:row;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:4px}
+    .grp-h{padding:8px 12px}
+  }
+  .empty{padding:26px 18px;text-align:center;color:var(--muted);font-size:14px;border-top:1px solid var(--line)}
+  .side{display:flex;flex-direction:column;gap:16px}
+  .sched-note{margin:-4px 16px 8px;font-size:12.5px;color:var(--muted)}
+  .more{display:block;width:100%;padding:11px;border:0;border-top:1px solid var(--line);background:none;color:var(--blue);font-weight:700;font-size:13.5px;cursor:pointer}
+  .more:hover{background:var(--bg)}
+  .btn.red{background:var(--live);color:#fff}
+  .talk{display:flex;flex-direction:column;gap:8px}
+  .talk p{margin:0;font-size:14px;color:var(--muted)}
+  .box{padding:16px 18px}
+  .box h3{margin:0 0 10px;font-size:16px;font-weight:900}
+  .notice{display:flex;gap:10px;padding:10px 0;border-top:1px solid var(--line);font-size:14px;cursor:pointer;background:none;border-left:0;border-right:0;border-bottom:0;width:100%;text-align:left;color:inherit}
+  .notice:first-of-type{border-top:0}
+  .notice .k{flex:none;font-size:11px;font-weight:700;padding:2px 7px;border-radius:6px;height:fit-content;margin-top:2px}
+  .k.important{background:#fde8e8;color:var(--no)}
+  .k.guide{background:var(--sky);color:var(--navy)}
+  .k.ticket{background:#fff3cd;color:#8a6100}
+  .notice .d{margin-left:auto;color:var(--muted);font-size:12px;flex:none}
+  .quick{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .quick a{display:block;padding:12px;border-radius:12px;background:var(--bg);text-decoration:none;font-size:13px;font-weight:700}
+  .quick a span{display:block;font-size:20px;margin-bottom:2px}
+  .quick a:hover{background:var(--sky)}
+  .legend2{display:flex;flex-wrap:wrap;gap:12px;font-size:12px;color:var(--muted);padding:0 18px 12px}
+  .legend2 i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px}
+
+  /* ---------- gameday ---------- */
+  .gd-hero{background:linear-gradient(135deg,var(--navy),var(--blue));color:#fff;border-radius:20px;padding:20px 22px;margin-bottom:16px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
+  .gd-hero h2{margin:0;font-size:22px;font-weight:900}
+  .gd-hero p{margin:2px 0 0;opacity:.85;font-size:14px}
+  .gd-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:16px;align-items:start}
+  @media (max-width:900px){.gd-grid{grid-template-columns:1fr}}
+  .live-list{display:grid;gap:10px;padding:0 16px 16px}
+  .live{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:12px 14px;border:1px solid var(--line);border-radius:14px}
+  .live .sp{font-size:22px}
+  .live .nm{font-weight:900;font-size:15px}
+  .live .mt{font-size:12px;color:var(--muted)}
+  .live .sc{font-size:22px;font-weight:900;font-variant-numeric:tabular-nums;text-align:right}
+  .st{display:inline-block;font-size:11px;font-weight:900;padding:2px 8px;border-radius:999px;margin-left:6px;vertical-align:2px}
+  .st.예정{background:#eef1f6;color:var(--muted)}
+  .st.LIVE{background:var(--live);color:#fff;animation:blink 1.4s infinite}
+  .st.종료{background:var(--ink);color:#fff}
+  @keyframes blink{50%{opacity:.55}}
+  .tr{padding:12px 0;border-top:1px dashed var(--line);font-size:14px}
+  .tr:first-of-type{border-top:0}
+  .tr b{display:block}
+  .tr small{color:var(--muted);display:block;margin-top:2px}
+  .check{display:flex;gap:8px;align-items:flex-start;padding:7px 0;font-size:14px}
+  .check input{margin-top:4px;width:16px;height:16px;accent-color:var(--blue)}
+  .cheer{display:flex;align-items:center;gap:10px;padding:10px 0;border-top:1px solid var(--line);font-size:14px}
+  .cheer:first-of-type{border-top:0}
+
+  /* ---------- guide ---------- */
+  .venue-tabs{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px;margin-bottom:14px}
+  .venue-tabs::-webkit-scrollbar{display:none}
+  .vt{flex:none;border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:8px 14px;text-align:left;color:var(--ink);min-width:0}
+  .vt b{display:block;font-size:14px;white-space:nowrap}
+  .vt small{display:block;font-size:11.5px;color:var(--muted);white-space:nowrap}
+  .vt.on{border-color:var(--navy);background:var(--navy);color:#fff}
+  .vt.on small{color:rgba(255,255,255,.75)}
+  .guide-grid{display:grid;grid-template-columns:1.35fr 1fr;gap:16px;align-items:start}
+  @media (max-width:900px){.guide-grid{grid-template-columns:1fr}}
+  .mapbox{padding:14px}
+  .maphead{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:6px}
+  .maphead b{font-size:15px}
+  .mapbox svg{width:100%;height:auto;display:block}
+  .legend{display:flex;flex-wrap:wrap;gap:12px;font-size:12px;color:var(--muted);margin-top:8px}
+  .legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+  .sec-path{cursor:pointer;transition:opacity .15s}
+  .sec-path:hover{opacity:.82}
+  .sec-path.dim{opacity:.22}
+  .sec-path.hl path{stroke:#ffcf33;stroke-width:4}
+  .gate-dot{cursor:pointer}
+  .finder{margin-top:12px;padding:12px;border-radius:12px;background:var(--bg);display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+  .finder label{font-size:13px;font-weight:700}
+  .finder select{flex:1;min-width:180px}
+  .infocard{padding:16px 18px;margin-bottom:16px;min-height:80px}
+  .infocard h4{margin:0 0 4px;font-size:16px}
+  .infocard p{margin:0;font-size:14px;color:var(--muted)}
+  .infocard .tip{margin-top:8px;padding:8px 10px;border-radius:10px;background:#f0f8f2;color:var(--green);font-size:13px}
+  .infocard .dept{margin-top:8px;padding:8px 10px;border-radius:10px;background:var(--sky);color:var(--navy);font-size:13px}
+  .rules{padding:16px 18px;margin-bottom:16px}
+  .rules h3{margin:0 0 10px;font-size:16px;font-weight:900}
+  .rule{display:flex;gap:10px;padding:8px 0;border-top:1px dashed var(--line);font-size:14px}
+  .rule:first-of-type{border-top:0}
+  .rule .ic{flex:none;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:13px;font-weight:900;color:#fff}
+  .ic.ok{background:var(--ok)} .ic.no{background:var(--no)} .ic.info{background:var(--entry)}
+  .gate-list{padding:16px 18px}
+  .gate-list h3{margin:0 0 10px;font-size:16px;font-weight:900}
+  .gl{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-top:1px solid var(--line);font-size:14px;cursor:pointer;width:100%;background:none;border-left:0;border-right:0;border-bottom:0;text-align:left;color:inherit}
+  .gl:first-of-type{border-top:0}
+  .gl .badge{flex:none;min-width:38px;text-align:center;border-radius:8px;color:#fff;font-weight:900;font-size:13px;padding:3px 6px}
+  .gl small{display:block;color:var(--muted);font-size:12px}
+  .faq{margin-top:16px}
+  details{border-top:1px solid var(--line);padding:12px 18px}
+  details:first-of-type{border-top:0}
+  summary{cursor:pointer;font-weight:700;font-size:14px}
+  details p{margin:8px 0 0;font-size:14px;color:var(--muted)}
+
+  /* ---------- players ---------- */
+  .sport-block{margin-bottom:22px}
+  .sport-h{display:flex;align-items:center;gap:8px;margin:0 0 10px;padding-bottom:8px;border-bottom:2px solid var(--navy);font-size:17px;font-weight:900}
+  .sport-h small{font-size:13px;color:var(--muted);font-weight:500}
+  .sport-h button{margin-left:auto}
+  .players{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
+  @media (max-width:520px){.players{grid-template-columns:1fr 1fr;gap:8px}}
+  .pcard{padding:14px;position:relative;overflow:hidden;cursor:pointer;text-align:left;font:inherit;color:inherit}
+  .pcard .num{font-size:40px;font-weight:900;line-height:1;color:var(--navy);letter-spacing:-.04em;min-height:40px}
+  .pcard .num.none{color:#b8c3d6}
+  .pcard .num.posbig{font-size:26px;line-height:40px;letter-spacing:-.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:62%}
+  .pcard .nm{font-weight:900;font-size:16px;margin-top:6px}
+  .pcard .ps{font-size:12.5px;color:var(--muted)}
+  .pcard .meta2{font-size:12px;color:var(--muted)}
+  .pcard .sp{position:absolute;right:10px;top:10px}
+  .pcard::after{content:attr(data-no);position:absolute;right:-6px;bottom:-24px;font-size:90px;font-weight:900;color:var(--sky);z-index:0;letter-spacing:-.05em}
+  .pcard > *{position:relative;z-index:1}
+  .pcard:hover{border-color:var(--blue)}
+  .pcard .ph{width:42px;height:42px;border-radius:50%;object-fit:cover;position:absolute;right:10px;bottom:10px;z-index:2;border:2px solid #fff}
+  .count{font-size:13px;color:var(--muted);margin-left:auto}
+
+  /* modal */
+  .modal{position:fixed;inset:0;background:rgba(10,20,40,.5);display:none;align-items:center;justify-content:center;z-index:50;padding:16px}
+  .modal.on{display:flex}
+  .modal .inner{background:#fff;border-radius:20px;max-width:440px;width:100%;overflow:hidden;max-height:92vh;overflow-y:auto}
+  .modal .inner.wide{max-width:720px}
+  .modal .top{background:var(--navy);color:#fff;padding:20px 22px;display:flex;gap:16px;align-items:center}
+  .modal .top h3{margin:0;font-size:21px}
+  .modal dl{display:grid;grid-template-columns:90px 1fr;gap:8px 12px;padding:18px 22px;margin:0;font-size:14px}
+  .modal dt{color:var(--muted)}
+  .modal dd{margin:0;font-weight:500}
+  .modal .note{margin:0 22px 14px;padding:10px 12px;border-radius:10px;background:#fff8e1;color:#7a5a00;font-size:13px}
+  .modal .close{display:flex;margin:0 22px 18px auto}
+  .avatar{width:60px;height:60px;border-radius:50%;flex:none;background:rgba(255,255,255,.15);display:grid;place-items:center;font-weight:900;font-size:24px;overflow:hidden}
+  .avatar img{width:100%;height:100%;object-fit:cover}
+  .saveimg{padding:16px 18px}
+  .saveimg img{width:100%;border-radius:12px;border:1px solid var(--line);display:block}
+  .saveimg p{font-size:13px;color:var(--muted);margin:10px 0 0}
+
+  /* ---------- archive ---------- */
+  .summary{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+  .stat{padding:14px 16px}
+  .stat .v{font-size:26px;font-weight:900;letter-spacing:-.03em}
+  .stat .l{font-size:13px;color:var(--muted)}
+  @media (max-width:640px){.summary{grid-template-columns:1fr 1fr;gap:8px}}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th{text-align:left;font-size:12px;color:var(--muted);font-weight:500;padding:10px 14px;border-bottom:1px solid var(--line);white-space:nowrap}
+  td{padding:11px 14px;border-bottom:1px solid var(--line);white-space:nowrap}
+  tr:last-child td{border-bottom:0}
+  .score{font-weight:900;font-variant-numeric:tabular-nums}
+  .res{display:inline-block;width:26px;height:26px;border-radius:8px;color:#fff;font-weight:900;text-align:center;line-height:26px;font-size:13px}
+  .res.W{background:var(--win)} .res.L{background:var(--lose)} .res.D{background:var(--draw)}
+  .tablewrap{overflow-x:auto}
+  @media (max-width:560px){.hide-m{display:none} th,td{padding:9px 8px;font-size:13px}}
+  .arch-block{margin-bottom:16px}
+  .arch-block .bh{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--line);font-weight:900;font-size:15px;flex-wrap:wrap}
+  .arch-block .bh small{font-weight:500;color:var(--muted);font-size:12.5px}
+  .yearband{display:flex;gap:8px;flex-wrap:wrap;padding:14px}
+  .yb{flex:1;min-width:120px;border-radius:12px;padding:12px 14px;background:var(--bg)}
+  .yb b{display:block;font-size:13px}
+  .yb .dots{display:flex;gap:4px;margin-top:6px}
+  .yb .dots span{width:22px;height:22px;border-radius:6px;font-size:11px;color:#fff;display:grid;place-items:center;font-weight:900}
+  .yb .tot{font-size:12px;color:var(--muted);margin-top:6px}
+
+  footer{border-top:1px solid var(--line);padding:24px 0 40px;color:var(--muted);font-size:13px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap hbar">
+    <a class="logo" href="#home"><span class="mark">Y</span>연세 스포츠 허브<small>by 낫아웃</small></a>
+    <nav class="tabs" id="tabs">
+      <a href="#home" data-v="home">홈 · 일정</a>
+      <a href="#gameday" data-v="gameday" class="hot">연고전 당일</a>
+      <a href="#guide" data-v="guide">경기장 가이드</a>
+      <a href="#players" data-v="players">선수 DB</a>
+      <a href="#archive" data-v="archive">경기 아카이브</a>
+    </nav>
+  </div>
+</header>
+<div class="sample-note"><div class="wrap">ℹ️ <b>선수 DB</b>는 2026년 11월 기준 확인된 정보입니다. 일정·경기 결과·좌석 배치·교통 안내는 아직 <b>예시 데이터</b>입니다.</div></div>
+
+<main class="wrap">
+
+  <!-- ===================== HOME ===================== -->
+  <section class="view" id="v-home">
+    <div class="hero">
+      <div class="next" id="nextGame"></div>
+      <div class="portals">
+        <button class="portal yk" data-comp="yonko">
+          <span class="ic">🦅</span>
+          <span><h3>연고전 (정기전)</h3><p>매년 가을, <b>고려대</b>와 5개 종목을 겨루는 정기 친선경기</p></span>
+          <span class="arrow">›</span>
+        </button>
+        <button class="portal lg" data-comp="league">
+          <span class="ic">🏆</span>
+          <span><h3>대학리그<span class="hide-m"> · 비정기전</span></h3><p>시즌 중 <b>여러 대학</b>과 치르는 U리그 등 일반 경기</p></span>
+          <span class="arrow">›</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="home-grid">
+      <div class="card" id="schedCard">
+        <div class="sched-head">
+          <h3 id="schedTitle">다가오는 경기</h3>
+          <div class="seg" id="compSeg">
+            <button data-c="all" class="on">전체</button>
+            <button data-c="yonko">연고전</button>
+            <button data-c="league">대학리그</button>
+          </div>
+        </div>
+        <p class="sched-note">연세대가 출전하는 경기만 모았어요. 종목을 누르면 그 종목 경기만 보여요.</p>
+        <div style="padding:0 16px 10px"><div class="seg scroll" id="sportSeg"></div></div>
+        <div id="schedList"></div>
+      </div>
+
+      <div class="side">
+        <div class="card box">
+          <h3>📢 공지 · 현장 안내</h3>
+          <div id="notices"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== GAMEDAY ===================== -->
+  <section class="view" id="v-gameday">
+    <div class="gd-hero">
+      <div><h2 id="gdTitle"></h2><p id="gdSub"></p></div>
+      <a class="btn white" id="gdLiveBtn" target="_blank" rel="noopener">📺 생중계 보기</a>
+    </div>
+    <div class="gd-grid">
+      <div>
+        <div class="card" style="margin-bottom:16px">
+          <div class="sched-head"><h3>🔴 실시간 스코어</h3><span class="info" id="gdUpdated"></span></div>
+          <div class="live-list" id="liveList"></div>
+        </div>
+        <div class="card box" style="margin-bottom:16px">
+          <h3>💬 실시간 응원톡</h3>
+          <div class="talk" id="talk"></div>
+        </div>
+        <div class="card box" style="margin-bottom:16px">
+          <h3>🚇 교통 · 셔틀 안내</h3>
+          <div id="transport"></div>
+        </div>
+      </div>
+      <div>
+        <div class="card box" style="margin-bottom:16px">
+          <h3>📶 데이터 안 터질 때 대비</h3>
+          <p style="margin:0 0 10px;font-size:14px;color:var(--muted)">잠실·목동은 인파로 데이터가 잘 안 터질 수 있어요. <b style="color:var(--ink)">출발 전에</b> 내 좌석 지도를 이미지로 저장해 두세요.</p>
+          <a class="btn blue" href="#guide">🖼 좌석 지도 저장하러 가기</a>
+        </div>
+        <div class="card box" style="margin-bottom:16px">
+          <h3>📣 응원가 · 응원 영상</h3>
+          <div id="cheers"></div>
+        </div>
+        <div class="card box">
+          <h3>✅ 당일 준비물 체크</h3>
+          <div id="checklist"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== GUIDE ===================== -->
+  <section class="view" id="v-guide">
+    <h2 class="sec">경기장 · 현장 가이드</h2>
+    <p class="sub">게이트 위치, 재입장 가능 여부, 단과대별 응원석을 경기장마다 확인하세요.</p>
+    <div class="venue-tabs" id="venueTabs"></div>
+
+    <div class="guide-grid">
+      <div>
+        <div class="card mapbox">
+          <div class="maphead"><b id="mapTitle"></b><button class="btn soft sm" id="saveMap">🖼 이미지로 저장</button></div>
+          <svg id="map" viewBox="0 0 600 440" role="img" aria-label="경기장 배치도"></svg>
+          <div class="legend">
+            <span><i style="background:var(--ok)"></i>재입장 가능 게이트</span>
+            <span><i style="background:var(--no)"></i>재입장 불가 (퇴장 전용)</span>
+            <span><i style="background:var(--entry)"></i>입장 전용</span>
+            <span><i style="background:#c9d3e3"></i>일반석</span>
+            <span><i style="background:#f3c4c4"></i>상대측</span>
+          </div>
+          <div class="finder" id="finder">
+            <label for="collegeSel">🎓 내 단과대 찾기</label>
+            <select id="collegeSel"></select>
+          </div>
+        </div>
+        <div class="card faq" id="faq"></div>
+      </div>
+      <div>
+        <div class="card infocard" id="mapInfo"></div>
+        <div class="card rules" id="rules"></div>
+        <div class="card gate-list" id="gateList"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLAYERS ===================== -->
+  <section class="view" id="v-players">
+    <h2 class="sec">선수 DB</h2>
+    <p class="sub">2026 시즌 연세대 5개 운동부 선수 명단. 이름·등번호·학과로 검색하고, 카드를 누르면 상세 프로필이 열립니다.</p>
+    <div class="toolbar">
+      <div class="seg scroll" id="pSportSeg"></div>
+      <input class="search" id="pSearch" placeholder="이름·등번호·학과 검색 (예: 22)">
+      <select id="pPos"></select>
+      <span class="count" id="pCount"></span>
+    </div>
+    <div id="players"></div>
+  </section>
+
+  <!-- ===================== ARCHIVE ===================== -->
+  <section class="view" id="v-archive">
+    <h2 class="sec">경기 아카이브</h2>
+    <p class="sub">역대 연고전과 대학리그 결과를 종목별로 확인하고, 경기 영상도 다시 볼 수 있어요.</p>
+    <div class="toolbar">
+      <div class="seg scroll" id="aSportSeg"></div>
+    </div>
+    <div class="toolbar">
+      <div class="seg" id="aCompSeg">
+        <button data-c="all" class="on">전체</button>
+        <button data-c="yonko">연고전</button>
+        <button data-c="league">대학리그</button>
+      </div>
+      <select id="aYear"></select>
+    </div>
+    <div class="summary" id="aSummary"></div>
+    <div class="card" id="yearBandCard" style="margin-bottom:16px"><div class="yearband" id="yearBand"></div></div>
+    <div id="aBlocks"></div>
+  </section>
+</main>
+
+<div class="modal" id="modal"><div class="inner" id="modalInner"></div></div>
+
+<footer><div class="wrap">연세 스포츠 허브 · 연세대학교 학생자율연구 '낫아웃' 팀 제작 · 학교 공식 사이트가 아닙니다. 정확한 정보는 각 공지 출처를 확인하세요.</div></footer>
+
+<script>
+/* =====================================================================
+   DATA — 이 객체만 수정하면 사이트 전체가 바뀝니다.
+   comp: 'yonko'(연고전·정기전) | 'league'(대학리그·비정기전)
+   ===================================================================== */
+const DATA = {
+  sports: [
+    {id:'baseball',   name:'야구',     emoji:'⚾'},
+    {id:'basketball', name:'농구',     emoji:'🏀'},
+    {id:'hockey',     name:'아이스하키', emoji:'🏒'},
+    {id:'rugby',      name:'럭비',     emoji:'🏉'},
+    {id:'soccer',     name:'축구',     emoji:'⚽'},
+  ],
+
+  // 신촌캠퍼스 단과대 전체 (내 단과대 찾기 목록)
+  colleges: ['문과대학','상경대학','경영대학','이과대학','공과대학','생명시스템대학','인공지능융합대학','신과대학','사회과학대학',
+             '음악대학','생활과학대학','교육과학대학','언더우드국제대학','글로벌인재대학','의과대학','치과대학','간호대학','약학대학'],
+
+  notices: [
+    {type:'important', label:'중요', title:'럭비·축구 경기장 재입장 통로 변경 안내', date:'2026-11-10', body:'재입장은 2번·5번 게이트에서만 가능합니다. 입장 시 받은 손목밴드를 반드시 착용하세요. 3번 게이트는 퇴장 전용이며 재입장이 불가합니다.'},
+    {type:'ticket',    label:'티켓', title:'U리그 홈경기 무료 입장 (학생증 지참)', date:'2026-11-08', body:'신촌캠퍼스 대운동장 홈경기는 학생증 제시 시 무료 입장입니다. 별도 예매가 필요하지 않습니다.'},
+    {type:'guide',     label:'안내', title:'단과대별 응원석 배치도 업데이트', date:'2026-11-05', body:'경기장 가이드 탭에서 18개 단과대 모두 내 좌석 구역을 찾을 수 있습니다.'},
+    {type:'guide',     label:'안내', title:'경기장 반입 금지 물품 안내', date:'2026-11-01', body:'캔·병 음료, 주류, 셀카봉, 대형 깃발(봉 포함)은 반입이 제한될 수 있습니다.'},
+  ],
+
+  // 일정. 모든 경기에 venueId를 넣으면 '경기장 안내' 버튼이 생깁니다.
+  // 티켓: free(무료 입장) | ticketOpen(예매 오픈 시각) + ticketUrl(예매 링크)
+  // 중계: streamUrl(유튜브 생중계 주소)을 넣으면 📺 생중계 버튼이 생깁니다. 없으면 경기 당일·전날에 검색 링크가 보입니다.
+  schedule: [
+    {comp:'league', sport:'basketball', opp:'중앙대',   date:'2026-11-18T17:00', venue:'연세대 체육관',    venueId:'gym',      round:'대학농구리그 플레이오프', free:true},
+    {comp:'league', sport:'hockey',     opp:'한양대',   date:'2026-11-22T19:00', venue:'고려대 아이스링크', venueId:'kurink',   round:'대학아이스하키 리그', free:true},
+    {comp:'league', sport:'soccer',     opp:'고려대',   date:'2026-11-25T15:00', venue:'신촌 대운동장',   venueId:'campus',   round:'U리그 왕중왕전 8강', free:true},
+    {comp:'league', sport:'rugby',      opp:'경희대',   date:'2026-11-29T13:00', venue:'신촌 대운동장',   venueId:'campus',   round:'대학럭비 추계리그', free:true},
+    {comp:'league', sport:'baseball',   opp:'성균관대', date:'2026-12-02T13:00', venue:'목동야구장',      venueId:'ballpark', round:'대학야구 추계리그', free:true},
+    {comp:'yonko',  sport:'baseball',   opp:'고려대',   date:'2027-09-17T11:00', venue:'목동야구장',      venueId:'ballpark', round:'2027 정기 연고전 1일차', ticketOpen:'2027-09-01T10:00', ticketUrl:''},
+    {comp:'yonko',  sport:'basketball', opp:'고려대',   date:'2027-09-17T15:00', venue:'잠실학생체육관',   venueId:'arena',    round:'2027 정기 연고전 1일차', ticketOpen:'2027-09-01T10:00', ticketUrl:''},
+    {comp:'yonko',  sport:'hockey',     opp:'고려대',   date:'2027-09-17T18:00', venue:'목동아이스링크',   venueId:'rink',     round:'2027 정기 연고전 1일차', ticketOpen:'2027-09-01T10:00', ticketUrl:''},
+    {comp:'yonko',  sport:'rugby',      opp:'고려대',   date:'2027-09-18T11:00', venue:'잠실종합운동장',   venueId:'stadium',  round:'2027 정기 연고전 2일차', ticketOpen:'2027-09-01T10:00', ticketUrl:''},
+    {comp:'yonko',  sport:'soccer',     opp:'고려대',   date:'2027-09-18T15:00', venue:'잠실종합운동장',   venueId:'stadium',  round:'2027 정기 연고전 2일차', ticketOpen:'2027-09-01T10:00', ticketUrl:''},
+  ],
+
+  // 연고전 당일 화면. live: 운영진이 경기 중 직접 점수를 갱신 (status: '예정' | 'LIVE' | '종료')
+  gameday: {
+    title:'2027 정기 연고전', sub:'9.17(금) ~ 9.18(토) · 목동 · 잠실 (예시)',
+    liveUrl:'https://www.youtube.com/results?search_query=%EC%97%B0%EA%B3%A0%EC%A0%84+%EC%83%9D%EC%A4%91%EA%B3%84',
+    // 응원톡: 생중계 채널이 정해지면 채팅창 주소(예: 유튜브 라이브 채팅)를 talkUrl에 넣으세요.
+    talkUrl:'',
+    updated:'',
+    live:[
+      {sport:'baseball',   status:'예정', score:null},
+      {sport:'basketball', status:'예정', score:null},
+      {sport:'hockey',     status:'예정', score:null},
+      {sport:'rugby',      status:'예정', score:null},
+      {sport:'soccer',     status:'예정', score:null},
+    ],
+    transport:[
+      {where:'잠실종합운동장 · 잠실학생체육관', how:'지하철 2·9호선 종합운동장역', tip:'경기 직후 역이 매우 혼잡해요. 삼성역(2호선)·봉은사역(9호선)까지 걸어가는 것도 방법입니다. (예시)'},
+      {where:'목동야구장 · 목동아이스링크', how:'지하철 5호선 오목교역 · 목동역', tip:'야구 → 하키 이동 시 경기장끼리 도보 이동 가능 (예시)'},
+      {where:'🚌 단체 셔틀 (예시)', how:'신촌캠퍼스 정문 → 잠실 · 목동', tip:'운행 시간과 탑승 위치는 총학생회 공지를 확인하세요.'},
+    ],
+    // 응원가: 제목과 공식 영상 링크를 넣으면 목록에 표시됩니다.
+    cheers:[],
+    cheerSearch:'https://www.youtube.com/results?search_query=%EC%97%B0%EC%84%B8%EB%8C%80+%EC%9D%91%EC%9B%90%EB%8B%A8+%EC%9D%91%EC%9B%90%EA%B0%80',
+    checklist:['학생증 · 모바일 티켓','입장 손목밴드 (재입장 시 필요)','보조배터리','좌석 지도 이미지 저장','응원 단체복 · 응원 도구','교통카드 충전'],
+  },
+
+  // 경기장. layout: 'stadium' | 'arena' | 'rink' | 'ballpark'
+  // sections: 시계방향(12시부터). who: 단과대 배열 / away:true 상대측 / 빈 who = 일반석
+  // detail: 단과대 안에서 학과별 위치가 다를 때 안내 (선택)
+  // gates: angle(12시=0, 시계방향), type: 'reentry' | 'noreentry' | 'entry'
+  venues: [
+    { id:'stadium', name:'잠실종합운동장', use:'연고전 럭비 · 축구', layout:'stadium',
+      sections:[
+        {label:'N1', who:['공과대학','인공지능융합대학'], detail:{'공과대학':'앞쪽 1~15열: 기계·전기전자·화공생명 / 뒤쪽 16열~: 건설환경·건축·도시 등 (예시)'}},
+        {label:'N2', who:['이과대학','생명시스템대학']},
+        {label:'N3', who:['의과대학','치과대학','간호대학','약학대학']},
+        {label:'E1', who:['상경대학']},
+        {label:'E2', who:['경영대학']},
+        {label:'E3', who:['문과대학','신과대학'], detail:{'문과대학':'왼쪽 블록: 국문·영문·사학 / 오른쪽 블록: 철학·독문·불문·노문 등 (예시)'}},
+        {label:'S1', who:['사회과학대학','교육과학대학']},
+        {label:'S2', who:['언더우드국제대학','글로벌인재대학']},
+        {label:'S3', who:['음악대학','생활과학대학']},
+        {label:'W1', away:true}, {label:'W2', away:true}, {label:'W3', away:true},
+      ],
+      gates:[
+        {no:1, angle:20,  type:'entry',     where:'북측 광장 (종합운동장역 방면)', note:'입장 전용. 티켓·학생증 확인 후 손목밴드 배부.'},
+        {no:2, angle:75,  type:'reentry',   where:'동측 중앙', note:'손목밴드 착용 시 재입장 가능. 화장실·매점 이용 후 이 게이트로 돌아오세요.'},
+        {no:3, angle:140, type:'noreentry', where:'동남측', note:'퇴장 전용. 이 게이트로 나가면 재입장할 수 없습니다.'},
+        {no:4, angle:200, type:'noreentry', where:'남측', note:'퇴장 전용. 경기 종료 후 혼잡 시에만 개방.'},
+        {no:5, angle:250, type:'reentry', away:true, where:'서측 (상대측 구역)', note:'상대측 응원석 재입장 게이트. 연세대 구역과 통로가 분리되어 있습니다.'},
+      ],
+      rules:[
+        {t:'ok',   s:'손목밴드를 착용한 경우 <b>2번·5번 게이트</b>로 재입장 가능'},
+        {t:'no',   s:'<b>3번·4번 게이트</b>는 퇴장 전용 — 나가면 재입장 불가'},
+        {t:'no',   s:'경기 중 하프타임 외 관중석 구역 간 이동 제한'},
+        {t:'info', s:'럭비 → 축구 사이 휴식시간에는 1회 퇴장 후 재입장 절차를 거칠 수 있음'},
+      ]},
+    { id:'arena', name:'잠실학생체육관', use:'연고전 농구', layout:'arena',
+      sections:[
+        {label:'101', who:['경영대학','상경대학']},
+        {label:'102', who:['공과대학','인공지능융합대학']},
+        {label:'103', who:['이과대학','생명시스템대학','의과대학','치과대학','간호대학','약학대학']},
+        {label:'104', who:['문과대학','신과대학','음악대학']},
+        {label:'105', who:['사회과학대학','교육과학대학','생활과학대학']},
+        {label:'106', who:['언더우드국제대학','글로벌인재대학']},
+        {label:'107', away:true}, {label:'108', away:true}, {label:'109', away:true}, {label:'110', away:true},
+      ],
+      gates:[
+        {no:1, angle:0,   type:'entry',     where:'정문 로비', note:'입장 전용. 가방 검사 진행.'},
+        {no:2, angle:90,  type:'reentry',   where:'동측 출입구', note:'재입장 가능 (손등 스탬프 확인).'},
+        {no:3, angle:180, type:'noreentry', where:'후문', note:'퇴장 전용. 재입장 불가.'},
+        {no:4, angle:270, type:'reentry', away:true, where:'서측 출입구 (상대측)', note:'상대측 재입장 게이트.'},
+      ],
+      rules:[
+        {t:'ok', s:'손등 스탬프가 있으면 <b>2번 게이트</b>로 재입장 가능'},
+        {t:'no', s:'<b>3번(후문)</b>은 퇴장 전용'},
+        {t:'info', s:'실내 경기장 — 음식물 반입 제한, 생수만 허용될 수 있음'},
+      ]},
+    { id:'ballpark', name:'목동야구장', use:'연고전 · 리그 야구', layout:'ballpark',
+      sections:[
+        {label:'1루 A', who:['공과대학','인공지능융합대학','이과대학','생명시스템대학']},
+        {label:'1루 B', who:['경영대학','상경대학','사회과학대학','교육과학대학']},
+        {label:'1루 C', who:['문과대학','신과대학','음악대학','생활과학대학']},
+        {label:'1루 D', who:['언더우드국제대학','글로벌인재대학','의과대학','치과대학','간호대학','약학대학']},
+        {label:'중앙', who:[]},
+        {label:'3루 C', away:true}, {label:'3루 B', away:true}, {label:'3루 A', away:true},
+      ],
+      gates:[
+        {no:1, angle:60,  type:'entry',     where:'1루 측 매표소 옆', note:'연세대 응원석 입장 게이트.'},
+        {no:2, angle:88,  type:'reentry',   where:'1루 외야 방면', note:'재입장 가능 (티켓 소지).'},
+        {no:3, angle:-88, type:'reentry', away:true, where:'3루 외야 방면 (상대측)', note:'상대측 재입장 게이트.'},
+        {no:4, angle:-60, type:'noreentry', where:'3루 측', note:'퇴장 전용.'},
+      ],
+      rules:[
+        {t:'ok', s:'티켓을 소지하면 <b>2번 게이트</b>로 재입장 가능'},
+        {t:'info', s:'1루 측이 연세대 응원석 (예시)'},
+      ]},
+    { id:'rink', name:'목동아이스링크', use:'연고전 아이스하키', layout:'rink',
+      sections:[
+        {label:'A', who:['공과대학','인공지능융합대학','이과대학','생명시스템대학']},
+        {label:'B', who:['경영대학','상경대학','사회과학대학','교육과학대학']},
+        {label:'C', who:['문과대학','신과대학','음악대학','생활과학대학']},
+        {label:'D', who:['언더우드국제대학','글로벌인재대학','의과대학','치과대학','간호대학','약학대학']},
+        {label:'E', who:[]},
+        {label:'F', away:true}, {label:'G', away:true}, {label:'H', away:true},
+      ],
+      gates:[
+        {no:1, angle:10,  type:'entry',     where:'정문', note:'입장 전용. 실내가 추우니 겉옷을 챙기세요.'},
+        {no:2, angle:100, type:'reentry',   where:'동측 출입구', note:'재입장 가능 (손등 스탬프 확인).'},
+        {no:3, angle:250, type:'noreentry', where:'서측 출입구', note:'퇴장 전용.'},
+      ],
+      rules:[
+        {t:'ok', s:'손등 스탬프가 있으면 <b>2번 게이트</b>로 재입장 가능'},
+        {t:'info', s:'좌석 수가 적어 조기 마감될 수 있음 (예시)'},
+      ]},
+    { id:'campus', name:'신촌 대운동장', use:'홈경기 축구 · 럭비', layout:'stadium', free:true,
+      sections:[
+        {label:'본부석', who:[]}, {label:'A', who:[]}, {label:'B', who:[]}, {label:'C', who:[]},
+        {label:'D', who:[]}, {label:'E', who:[]}, {label:'F', who:[]}, {label:'G', who:[]},
+        {label:'원정', away:true}, {label:'H', who:[]}, {label:'I', who:[]}, {label:'J', who:[]},
+      ],
+      gates:[
+        {no:1, angle:30,  type:'reentry', where:'백양로 방면', note:'자유 출입 (무료 경기).'},
+        {no:2, angle:150, type:'reentry', where:'체육관 방면', note:'자유 출입.'},
+        {no:3, angle:270, type:'reentry', where:'공학관 방면', note:'자유 출입.'},
+      ],
+      rules:[
+        {t:'ok', s:'교내 홈경기는 <b>모든 게이트 자유 출입</b>'},
+        {t:'info', s:'단과대 구분 없는 자유석 · 학생증 지참 권장'},
+      ]},
+    { id:'gym', name:'연세대 체육관', use:'홈경기 농구', layout:'arena', free:true,
+      sections:[
+        {label:'1층 A', who:[]}, {label:'1층 B', who:[]}, {label:'2층 A', who:[]}, {label:'2층 B', who:[]},
+        {label:'2층 C', who:[]}, {label:'원정', away:true},
+      ],
+      gates:[
+        {no:1, angle:0,   type:'reentry', where:'정문 (신촌캠퍼스 체육관 입구)', note:'자유 출입.'},
+        {no:2, angle:180, type:'reentry', where:'후문', note:'자유 출입.'},
+      ],
+      rules:[
+        {t:'ok', s:'홈경기는 <b>자유 출입</b>, 단과대 구분 없는 자유석'},
+      ]},
+    { id:'kurink', name:'고려대 아이스링크', use:'원정 아이스하키', layout:'rink', free:true,
+      sections:[
+        {label:'홈', away:true}, {label:'중앙', who:[]}, {label:'원정석', who:[]}, {label:'중앙 ', who:[]},
+      ],
+      gates:[
+        {no:1, angle:0, type:'reentry', where:'정문', note:'자유 출입 (원정 경기).'},
+      ],
+      rules:[
+        {t:'info', s:'원정 경기 — 연세대 응원은 <b>원정석</b> 이용 (예시)'},
+        {t:'ok', s:'리그 경기는 자유 출입'},
+      ]},
+  ],
+
+  faq: [
+    {q:'재입장하려면 무엇이 필요한가요?', a:'경기장마다 다르지만 보통 입장 시 받은 손목밴드·손등 스탬프·티켓이 필요합니다. 퇴장 전에 반드시 게이트 목록에서 "재입장 가능" 게이트인지 확인하세요.'},
+    {q:'내 단과대 좌석이 어딘지 모르겠어요.', a:'지도 아래 "내 단과대 찾기"에서 단과대를 고르면 해당 구역이 강조되고, 가까운 게이트와 학과별 위치(있는 경우)가 표시됩니다.'},
+    {q:'경기장에서 인터넷이 안 될까 걱정돼요.', a:'지도 위 "이미지로 저장" 버튼을 눌러 좌석 지도를 사진첩에 저장해 두면 데이터 없이도 볼 수 있어요.'},
+    {q:'연고전 티켓은 언제 열리나요?', a:'홈 화면 경기 카드에 예매 오픈 시각이 표시됩니다. "오픈 알림" 버튼으로 휴대폰 캘린더에 알림을 등록할 수 있어요.'},
+  ],
+
+  players: [
+  {
+    "sport": "baseball",
+    "no": 1,
+    "name": "강민구",
+    "pos": "투수",
+    "dept": "체육교육학과",
+    "hakbun": "23",
+    "birth": "",
+    "byear": 2004,
+    "age": null,
+    "height": 180,
+    "weight": 85,
+    "from": "군산상고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "baseball",
+    "no": 3,
+    "name": "석승민",
+    "pos": "외야수",
+    "dept": "스포츠응용산업학과",
+    "hakbun": "25",
+    "birth": "",
+    "byear": 2006,
+    "age": null,
+    "height": 179,
+    "weight": 80,
+    "from": "대구상원고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "baseball",
+    "no": 5,
+    "name": "김민준",
+    "pos": "내야수(3B)",
+    "dept": "스포츠응용산업학과",
+    "hakbun": "25",
+    "birth": "",
+    "byear": 2005,
+    "age": null,
+    "height": 183,
+    "weight": 85,
+    "from": "안산공업고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "baseball",
+    "no": 6,
+    "name": "제승하",
+    "pos": "내야수",
+    "dept": "스포츠응용산업학과",
+    "hakbun": "26",
+    "birth": "",
+    "byear": 2007,
+    "age": null,
+    "height": "177",
+    "weight": "78",
+    "from": "마산용마고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "baseball",
+    "no": 7,
+    "name": "이지원",
+    "pos": "내야수(2B)",
+    "dept": "스포츠응용산업학과",
+    "hakbun": "23",
+    "birth": "",
+    "byear": 2005,
+    "age": null,
+    "height": 181,
+    "weight": 82,
+    "from": "대전고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "baseball",
+    "no": 10,
+    "name": "박태강",
+    "pos": "투수",
+    "dept": "체육교육학과",
+    "hakbun": "22",
+    "birth": "",
+    "byear": 2003,
+    "age": null,
+    "height": 178,
+    "weight": 80,
+    "from": "장충고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "baseball",
+    "no": 11,
+    "name": "조영우",
+    "pos": "투수",
+    "dept": "체육교육학과",
+    "hakbun": "23",
+    "birth": "",
+    "byear": 2004,
+    "age": null,
+    "height": "182",
+    "weight": "81",
+    "from": "유신고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "baseball",
+    "no": 13,
+    "name": "김민석",
+    "pos": "내야수(1B)",
+    "dept": "스포츠응용산업학과",
+    "hakbun": "25",
+    "birth": "",
+    "byear": 2005,
+    "age": null,
+    "height": 187,
+    "weight": 90,
+    "from": "충암고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "baseball",
+    "no": 15,
+    "name": "이태현",
+    "pos": "투수",
+    "dept": "체육교육학과",
+    "hakbun": "26",
+    "birth": "",
+    "byear": 2007,
+    "age": null,
+    "height": "180",
+    "weight": "78",
+    "from": "백송고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "baseball",
+    "no": 16,
+    "name": "박민욱",
+    "pos": "내야수",
+    "dept": "스포츠응용산업학과",
+    "hakbun": "25",
+    "birth": "",
+    "byear": 2006,
+    "age": null,
+    "height": 178,
+    "weight": 77,
+    "from": "대전고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "baseball",
+    "no": 17,
+    "name": "조장현",
+    "pos": "외야수(CF)",
+    "dept": "스포츠응용산업학과",
+    "hakbun": "23",
+    "birth": "",
+    "byear": 2004,
+    "age": null,
+    "height": "178",
+    "weight": "77",
+    "from": "유신고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "baseball",
+    "no": 18,
+    "name": "김태양",
+    "pos": "투수",
+    "dept": "체육교육학과",
+    "hakbun": "23",
+    "birth": "",
+    "byear": 2004,
+    "age": null,
+    "height": 178,
+    "weight": 88,
+    "from": "제주고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "baseball",
+    "no": 20,
+    "name": "홍윤재",
+    "pos": "투수",
+    "dept": "체육교육학과",
+    "hakbun": "24",
+    "birth": "",
+    "byear": 2005,
+    "age": null,
+    "height": "180",
+    "weight": "80",
+    "from": "배재고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "baseball",
+    "no": 21,
+    "name": "문정서",
+    "pos": "투수",
+    "dept": "체육교육학과",
+    "hakbun": "26",
+    "birth": "",
+    "byear": 2007,
+    "age": null,
+    "height": 188,
+    "weight": 92,
+    "from": "성남고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "baseball",
+    "no": 22,
+    "name": "김동주",
+    "pos": "포수",
+    "dept": "스포츠응용산업학과",
+    "hakbun": "23",
+    "birth": "",
+    "byear": 2004,
+    "age": null,
+    "height": 181,
+    "weight": 93,
+    "from": "장충고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "baseball",
+    "no": 25,
+    "name": "이정현",
+    "pos": "포수",
+    "dept": "체육교육학과",
+    "hakbun": "25",
+    "birth": "",
+    "byear": 2006,
+    "age": null,
+    "height": 184,
+    "weight": 93,
+    "from": "경기항공고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "baseball",
+    "no": 29,
+    "name": "김인우",
+    "pos": "투수",
+    "dept": "체육교육학과",
+    "hakbun": "24",
+    "birth": "",
+    "byear": 2005,
+    "age": null,
+    "height": 183,
+    "weight": 88,
+    "from": "제일고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "baseball",
+    "no": 35,
+    "name": "임지성",
+    "pos": "투수",
+    "dept": "체육교육학과",
+    "hakbun": "25",
+    "birth": "",
+    "byear": 2006,
+    "age": null,
+    "height": "182",
+    "weight": "93",
+    "from": "덕수고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "baseball",
+    "no": 37,
+    "name": "류한준",
+    "pos": "투수",
+    "dept": "체육교육학과",
+    "hakbun": "25",
+    "birth": "",
+    "byear": 2006,
+    "age": null,
+    "height": 185,
+    "weight": 90,
+    "from": "휘문고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "baseball",
+    "no": 41,
+    "name": "박진권",
+    "pos": "투수",
+    "dept": "체육교육학과",
+    "hakbun": "26",
+    "birth": "",
+    "byear": 2007,
+    "age": null,
+    "height": 178,
+    "weight": 84,
+    "from": "서울고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "baseball",
+    "no": 48,
+    "name": "김태성",
+    "pos": "포수",
+    "dept": "스포츠응용산업학과",
+    "hakbun": "26",
+    "birth": "",
+    "byear": 2007,
+    "age": null,
+    "height": 182,
+    "weight": 93,
+    "from": "서울고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "baseball",
+    "no": 50,
+    "name": "김다민",
+    "pos": "외야수",
+    "dept": "스포츠응용산업학과",
+    "hakbun": "26",
+    "birth": "",
+    "byear": 2007,
+    "age": null,
+    "height": 177,
+    "weight": 76,
+    "from": "경기항공고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "baseball",
+    "no": 51,
+    "name": "성현호",
+    "pos": "외야수",
+    "dept": "스포츠응용산업학과",
+    "hakbun": "24",
+    "birth": "",
+    "byear": 2004,
+    "age": null,
+    "height": 176,
+    "weight": 72,
+    "from": "라온고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "baseball",
+    "no": 52,
+    "name": "공도혁",
+    "pos": "내야수",
+    "dept": "스포츠응용산업학과",
+    "hakbun": "24",
+    "birth": "",
+    "byear": 2005,
+    "age": null,
+    "height": 185,
+    "weight": 92,
+    "from": "성남고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "baseball",
+    "no": 53,
+    "name": "이충헌",
+    "pos": "외야수",
+    "dept": "스포츠응용산업학과",
+    "hakbun": "24",
+    "birth": "",
+    "byear": 2005,
+    "age": null,
+    "height": "180",
+    "weight": "80",
+    "from": "충암고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "basketball",
+    "no": 1,
+    "name": "이해솔",
+    "pos": "F",
+    "dept": "체육교육학과",
+    "hakbun": "23",
+    "birth": "2004-04-10",
+    "byear": null,
+    "age": 22,
+    "height": 188,
+    "weight": 80,
+    "from": "광신방예고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "basketball",
+    "no": 2,
+    "name": "최영상",
+    "pos": "G",
+    "dept": "체육교육학과",
+    "hakbun": "26",
+    "birth": "2007-02-22",
+    "byear": null,
+    "age": 19,
+    "height": 180,
+    "weight": 70,
+    "from": "삼일고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "basketball",
+    "no": 3,
+    "name": "구승채",
+    "pos": "F",
+    "dept": "체육교육학과",
+    "hakbun": "25",
+    "birth": "2006-12-13",
+    "byear": null,
+    "age": 19,
+    "height": 192,
+    "weight": 81,
+    "from": "양정고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "basketball",
+    "no": 5,
+    "name": "이주영",
+    "pos": "G",
+    "dept": "체육교육학과",
+    "hakbun": "23",
+    "birth": "2004-03-13",
+    "byear": null,
+    "age": 22,
+    "height": 189,
+    "weight": 82,
+    "from": "삼일고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "basketball",
+    "no": 6,
+    "name": "김승우",
+    "pos": "F",
+    "dept": "체육교육학과",
+    "hakbun": "24",
+    "birth": "2005-03-28",
+    "byear": null,
+    "age": 21,
+    "height": 192,
+    "weight": 84,
+    "from": "용산고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "basketball",
+    "no": 7,
+    "name": "이채형",
+    "pos": "G",
+    "dept": "스포츠응용산업학과",
+    "hakbun": "23",
+    "birth": "2004-09-13",
+    "byear": null,
+    "age": 22,
+    "height": 187,
+    "weight": 78,
+    "from": "용산고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "basketball",
+    "no": 9,
+    "name": "이병엽",
+    "pos": "G",
+    "dept": "스포츠응용산업학과",
+    "hakbun": "25",
+    "birth": "2006-09-13",
+    "byear": null,
+    "age": 20,
+    "height": 180,
+    "weight": 75,
+    "from": "경복고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "basketball",
+    "no": 10,
+    "name": "홍상민",
+    "pos": "C",
+    "dept": "체육교육학과",
+    "hakbun": "23",
+    "birth": "2003-05-07",
+    "byear": null,
+    "age": 23,
+    "height": 200,
+    "weight": 100,
+    "from": "경복고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "basketball",
+    "no": 11,
+    "name": "장혁준",
+    "pos": "F",
+    "dept": "체육교육학과",
+    "hakbun": "25",
+    "birth": "2006-01-16",
+    "byear": null,
+    "age": 20,
+    "height": 194,
+    "weight": 83,
+    "from": "용산고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "basketball",
+    "no": 12,
+    "name": "김상현",
+    "pos": "F",
+    "dept": "체육교육학과",
+    "hakbun": "26",
+    "birth": "2007-04-20",
+    "byear": null,
+    "age": 19,
+    "height": 190,
+    "weight": 73,
+    "from": "삼일고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "basketball",
+    "no": 13,
+    "name": "박준성",
+    "pos": "F",
+    "dept": "스포츠응용산업학과",
+    "hakbun": "26",
+    "birth": "2007-01-05",
+    "byear": null,
+    "age": 19,
+    "height": 189,
+    "weight": 84,
+    "from": "휘문고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "basketball",
+    "no": 14,
+    "name": "위진석",
+    "pos": "C",
+    "dept": "스포츠응용산업학과",
+    "hakbun": "25",
+    "birth": "2006-09-22",
+    "byear": null,
+    "age": 20,
+    "height": 201,
+    "weight": 106,
+    "from": "삼일고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "basketball",
+    "no": 22,
+    "name": "김윤서",
+    "pos": "F",
+    "dept": "스포츠응용산업학과",
+    "hakbun": "26",
+    "birth": "2007-02-02",
+    "byear": null,
+    "age": 19,
+    "height": 193,
+    "weight": 82,
+    "from": "용산고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "hockey",
+    "no": 1,
+    "name": "오은율",
+    "pos": "GK",
+    "dept": "스포츠응용산업학과",
+    "hakbun": "24",
+    "birth": "2005-12-09",
+    "byear": null,
+    "age": 20,
+    "height": 183,
+    "weight": 82,
+    "from": "경복고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "hockey",
+    "no": 2,
+    "name": "유찬우",
+    "pos": "DF",
+    "dept": "스포츠응용산업학과",
+    "hakbun": "26",
+    "birth": "2007-04-30",
+    "byear": null,
+    "age": 19,
+    "height": 184,
+    "weight": 83,
+    "from": "경복고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "hockey",
+    "no": 3,
+    "name": "김지환",
+    "pos": "DF",
+    "dept": "스포츠응용산업학과",
+    "hakbun": "25",
+    "birth": "2006-06-07",
+    "byear": null,
+    "age": 20,
+    "height": 176,
+    "weight": 73,
+    "from": "경복고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "hockey",
+    "no": 5,
+    "name": "김범수",
+    "pos": "FW",
+    "dept": "체육교육학과",
+    "hakbun": "26",
+    "birth": "2007-11-29",
+    "byear": null,
+    "age": 18,
+    "height": 178,
+    "weight": 80,
+    "from": "경기고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "hockey",
+    "no": 8,
+    "name": "장지현",
+    "pos": "DF",
+    "dept": "스포츠응용산업학과",
+    "hakbun": "24",
+    "birth": "2005-08-21",
+    "byear": null,
+    "age": 21,
+    "height": 185,
+    "weight": 85,
+    "from": "경복고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "hockey",
+    "no": 9,
+    "name": "문건오",
+    "pos": "FW",
+    "dept": "체육교육학과",
+    "hakbun": "22",
+    "birth": "2003-03-10",
+    "byear": null,
+    "age": 23,
+    "height": 174,
+    "weight": 74,
+    "from": "경복고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "hockey",
+    "no": 11,
+    "name": "김다온",
+    "pos": "FW",
+    "dept": "체육교육학과",
+    "hakbun": "23",
+    "birth": "2004-05-10",
+    "byear": null,
+    "age": 22,
+    "height": 177,
+    "weight": 75,
+    "from": "경기고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "hockey",
+    "no": 13,
+    "name": "김시환",
+    "pos": "FW",
+    "dept": "체육교육학과",
+    "hakbun": "23",
+    "birth": "2004-03-17",
+    "byear": null,
+    "age": 22,
+    "height": 177,
+    "weight": 75,
+    "from": "경복고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "hockey",
+    "no": 15,
+    "name": "임동규",
+    "pos": "DF",
+    "dept": "스포츠응용산업학과",
+    "hakbun": "23",
+    "birth": "2004-10-29",
+    "byear": null,
+    "age": 22,
+    "height": 190,
+    "weight": 87,
+    "from": "광성고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "hockey",
+    "no": 16,
+    "name": "강무경",
+    "pos": "FW",
+    "dept": "체육교육학과",
+    "hakbun": "25",
+    "birth": "2006-02-10",
+    "byear": null,
+    "age": 20,
+    "height": 172,
+    "weight": 70,
+    "from": "경복고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "hockey",
+    "no": 18,
+    "name": "공유찬",
+    "pos": "DF",
+    "dept": "스포츠응용산업학과",
+    "hakbun": "23",
+    "birth": "2004-07-20",
+    "byear": null,
+    "age": 22,
+    "height": 188,
+    "weight": 85,
+    "from": "중동고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "hockey",
+    "no": 19,
+    "name": "김치우",
+    "pos": "FW",
+    "dept": "체육교육학과",
+    "hakbun": "26",
+    "birth": "2007-06-20",
+    "byear": null,
+    "age": 19,
+    "height": 185,
+    "weight": 85,
+    "from": "경기고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "hockey",
+    "no": 22,
+    "name": "소은찬",
+    "pos": "DF",
+    "dept": "스포츠응용산업학과",
+    "hakbun": "25",
+    "birth": "2006-11-17",
+    "byear": null,
+    "age": 19,
+    "height": 177,
+    "weight": 73,
+    "from": "광성고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "hockey",
+    "no": 23,
+    "name": "신윤민",
+    "pos": "FW",
+    "dept": "체육교육학과",
+    "hakbun": "24",
+    "birth": "2004-09-02",
+    "byear": null,
+    "age": 22,
+    "height": 186,
+    "weight": 84,
+    "from": "광성고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "hockey",
+    "no": 27,
+    "name": "임은규",
+    "pos": "DF",
+    "dept": "스포츠응용산업학과",
+    "hakbun": "24",
+    "birth": "2005-04-29",
+    "byear": null,
+    "age": 21,
+    "height": 180,
+    "weight": 75,
+    "from": "경성고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "hockey",
+    "no": 32,
+    "name": "박상우",
+    "pos": "GK",
+    "dept": "스포츠응용산업학과",
+    "hakbun": "25",
+    "birth": "2006-03-23",
+    "byear": null,
+    "age": 20,
+    "height": 188,
+    "weight": 90,
+    "from": "경기고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "hockey",
+    "no": 37,
+    "name": "박진혁",
+    "pos": "GK",
+    "dept": "스포츠응용산업학과",
+    "hakbun": "26",
+    "birth": "2007-01-29",
+    "byear": null,
+    "age": 19,
+    "height": 187,
+    "weight": 88,
+    "from": "중동고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "hockey",
+    "no": 39,
+    "name": "이영빈",
+    "pos": "FW",
+    "dept": "체육교육학과",
+    "hakbun": "26",
+    "birth": "2007-08-20",
+    "byear": null,
+    "age": 19,
+    "height": 178,
+    "weight": 73,
+    "from": "경성고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "hockey",
+    "no": 46,
+    "name": "김정준",
+    "pos": "FW",
+    "dept": "체육교육학과",
+    "hakbun": "25",
+    "birth": "2006-09-07",
+    "byear": null,
+    "age": 20,
+    "height": 176,
+    "weight": 78,
+    "from": "경기고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "hockey",
+    "no": 55,
+    "name": "홍승우",
+    "pos": "DF",
+    "dept": "스포츠응용산업학과",
+    "hakbun": "23",
+    "birth": "2004-05-14",
+    "byear": null,
+    "age": 22,
+    "height": 177,
+    "weight": 77,
+    "from": "경기고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "hockey",
+    "no": 56,
+    "name": "최정헌",
+    "pos": "DF",
+    "dept": "스포츠응용산업학과",
+    "hakbun": "25",
+    "birth": "2006-11-13",
+    "byear": null,
+    "age": 19,
+    "height": 181,
+    "weight": 81,
+    "from": "경기고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "hockey",
+    "no": 61,
+    "name": "함가빈",
+    "pos": "DF",
+    "dept": "스포츠응용산업학과",
+    "hakbun": "26",
+    "birth": "2007-10-08",
+    "byear": null,
+    "age": 19,
+    "height": 180,
+    "weight": 80,
+    "from": "경기고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "hockey",
+    "no": 67,
+    "name": "권우현",
+    "pos": "FW",
+    "dept": "체육교육학과",
+    "hakbun": "24",
+    "birth": "2005-04-28",
+    "byear": null,
+    "age": 21,
+    "height": 182,
+    "weight": 78,
+    "from": "경기고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "hockey",
+    "no": 72,
+    "name": "채수민",
+    "pos": "FW",
+    "dept": "체육교육학과",
+    "hakbun": "24",
+    "birth": "2005-12-19",
+    "byear": null,
+    "age": 20,
+    "height": 182,
+    "weight": 75,
+    "from": "경복고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "hockey",
+    "no": 75,
+    "name": "김재헌",
+    "pos": "FW",
+    "dept": "체육교육학과",
+    "hakbun": "26",
+    "birth": "2007-08-17",
+    "byear": null,
+    "age": 19,
+    "height": 182,
+    "weight": 82,
+    "from": "경기고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "hockey",
+    "no": 87,
+    "name": "임성규",
+    "pos": "FW",
+    "dept": "체육교육학과",
+    "hakbun": "25",
+    "birth": "2006-11-04",
+    "byear": null,
+    "age": 20,
+    "height": 177,
+    "weight": 80,
+    "from": "광성고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "hockey",
+    "no": 97,
+    "name": "임재우",
+    "pos": "FW",
+    "dept": "체육교육학과",
+    "hakbun": "25",
+    "birth": "2006-01-29",
+    "byear": null,
+    "age": 20,
+    "height": 180,
+    "weight": 80,
+    "from": "경기고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "rugby",
+    "no": 1,
+    "name": "이원혁",
+    "pos": "PR",
+    "dept": "체육교육학과",
+    "hakbun": "25",
+    "birth": "2006-09-18",
+    "byear": null,
+    "age": 20,
+    "height": null,
+    "weight": null,
+    "from": "",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "rugby",
+    "no": 1,
+    "name": "이하람",
+    "pos": "PR",
+    "dept": "체육교육학과",
+    "hakbun": "24",
+    "birth": "2005-08-30",
+    "byear": null,
+    "age": 21,
+    "height": null,
+    "weight": null,
+    "from": "",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "rugby",
+    "no": 1,
+    "name": "장준영",
+    "pos": "PR",
+    "dept": "체육교육학과",
+    "hakbun": "24",
+    "birth": "2005-09-10",
+    "byear": null,
+    "age": 21,
+    "height": null,
+    "weight": null,
+    "from": "",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "rugby",
+    "no": 2,
+    "name": "김도훈",
+    "pos": "HK",
+    "dept": "체육교육학과",
+    "hakbun": "23",
+    "birth": "2004-10-11",
+    "byear": null,
+    "age": 22,
+    "height": null,
+    "weight": null,
+    "from": "",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "rugby",
+    "no": 2,
+    "name": "조성현",
+    "pos": "HK",
+    "dept": "스포츠응용산업학과",
+    "hakbun": "25",
+    "birth": "2006-04-19",
+    "byear": null,
+    "age": 20,
+    "height": null,
+    "weight": null,
+    "from": "",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "rugby",
+    "no": 3,
+    "name": "김혜원",
+    "pos": "PR",
+    "dept": "스포츠응용산업학과",
+    "hakbun": "26",
+    "birth": "2007-01-04",
+    "byear": null,
+    "age": 19,
+    "height": null,
+    "weight": null,
+    "from": "",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "rugby",
+    "no": 3,
+    "name": "손효",
+    "pos": "PR",
+    "dept": "스포츠응용산업학과",
+    "hakbun": "23",
+    "birth": "2004-06-11",
+    "byear": null,
+    "age": 22,
+    "height": null,
+    "weight": null,
+    "from": "",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "rugby",
+    "no": 3,
+    "name": "이성훈",
+    "pos": "PR",
+    "dept": "스포츠응용산업학과",
+    "hakbun": "26",
+    "birth": "2007-01-05",
+    "byear": null,
+    "age": 19,
+    "height": null,
+    "weight": null,
+    "from": "",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "rugby",
+    "no": 3,
+    "name": "이수현",
+    "pos": "PR",
+    "dept": "체육교육학과",
+    "hakbun": "24",
+    "birth": "2004-08-22",
+    "byear": null,
+    "age": 22,
+    "height": null,
+    "weight": null,
+    "from": "",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "rugby",
+    "no": 4,
+    "name": "김영훈",
+    "pos": "LO",
+    "dept": "스포츠응용산업학과",
+    "hakbun": "26",
+    "birth": "2007-07-19",
+    "byear": null,
+    "age": 19,
+    "height": null,
+    "weight": null,
+    "from": "",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "rugby",
+    "no": 5,
+    "name": "유경재",
+    "pos": "LO",
+    "dept": "체육교육학과",
+    "hakbun": "24",
+    "birth": "2005-10-11",
+    "byear": null,
+    "age": 21,
+    "height": null,
+    "weight": null,
+    "from": "",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "rugby",
+    "no": 5,
+    "name": "임민규",
+    "pos": "LO",
+    "dept": "스포츠응용산업학과",
+    "hakbun": "23",
+    "birth": "2004-07-30",
+    "byear": null,
+    "age": 22,
+    "height": null,
+    "weight": null,
+    "from": "",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "rugby",
+    "no": "5·6·7·8",
+    "name": "최규락",
+    "pos": "N8",
+    "dept": "스포츠응용산업학과",
+    "hakbun": "23",
+    "birth": "2004-01-26",
+    "byear": null,
+    "age": 22,
+    "height": null,
+    "weight": null,
+    "from": "",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "rugby",
+    "no": 6,
+    "name": "김수겸",
+    "pos": "FL",
+    "dept": "체육교육학과",
+    "hakbun": "26",
+    "birth": "2007-07-06",
+    "byear": null,
+    "age": 19,
+    "height": null,
+    "weight": null,
+    "from": "",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "rugby",
+    "no": "6·7",
+    "name": "김예겸",
+    "pos": "FL",
+    "dept": "체육교육학과",
+    "hakbun": "26",
+    "birth": "2007-07-06",
+    "byear": null,
+    "age": 19,
+    "height": null,
+    "weight": null,
+    "from": "",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "rugby",
+    "no": "7·8",
+    "name": "하늘",
+    "pos": "FL/N8",
+    "dept": "체육교육학과",
+    "hakbun": "24",
+    "birth": "2005-01-05",
+    "byear": null,
+    "age": 21,
+    "height": null,
+    "weight": null,
+    "from": "",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "rugby",
+    "no": 8,
+    "name": "왕희요",
+    "pos": "N8",
+    "dept": "스포츠응용산업학과",
+    "hakbun": "26",
+    "birth": "2007-10-11",
+    "byear": null,
+    "age": 19,
+    "height": null,
+    "weight": null,
+    "from": "",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "rugby",
+    "no": 9,
+    "name": "김병관",
+    "pos": "SH",
+    "dept": "체육교육학과",
+    "hakbun": "23",
+    "birth": "2004-10-07",
+    "byear": null,
+    "age": 22,
+    "height": null,
+    "weight": null,
+    "from": "",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "rugby",
+    "no": 9,
+    "name": "정인호",
+    "pos": "SH",
+    "dept": "체육교육학과",
+    "hakbun": "26",
+    "birth": "2007-04-12",
+    "byear": null,
+    "age": 19,
+    "height": null,
+    "weight": null,
+    "from": "",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "rugby",
+    "no": 10,
+    "name": "이용원",
+    "pos": "SO",
+    "dept": "체육교육학과",
+    "hakbun": "24",
+    "birth": "2005-04-08",
+    "byear": null,
+    "age": 21,
+    "height": null,
+    "weight": null,
+    "from": "",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "rugby",
+    "no": 10,
+    "name": "최영탁",
+    "pos": "SO",
+    "dept": "체육교육학과",
+    "hakbun": "25",
+    "birth": "2006-01-07",
+    "byear": null,
+    "age": 20,
+    "height": null,
+    "weight": null,
+    "from": "",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "rugby",
+    "no": "11·13",
+    "name": "이세빈",
+    "pos": "WTB/CTB",
+    "dept": "체육교육학과",
+    "hakbun": "23",
+    "birth": "2004-02-16",
+    "byear": null,
+    "age": 22,
+    "height": null,
+    "weight": null,
+    "from": "",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "rugby",
+    "no": 11,
+    "name": "이준서",
+    "pos": "WTB",
+    "dept": "체육교육학과",
+    "hakbun": "26",
+    "birth": "2007-01-30",
+    "byear": null,
+    "age": 19,
+    "height": null,
+    "weight": null,
+    "from": "",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "rugby",
+    "no": 11,
+    "name": "황은택",
+    "pos": "WTB",
+    "dept": "스포츠응용산업학과",
+    "hakbun": "24",
+    "birth": "2005-12-11",
+    "byear": null,
+    "age": 20,
+    "height": null,
+    "weight": null,
+    "from": "",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "rugby",
+    "no": "12·13",
+    "name": "김환성",
+    "pos": "CTB",
+    "dept": "스포츠응용산업학과",
+    "hakbun": "26",
+    "birth": "2007-07-28",
+    "byear": null,
+    "age": 19,
+    "height": null,
+    "weight": null,
+    "from": "",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "rugby",
+    "no": "12·13",
+    "name": "박지훈",
+    "pos": "CTB",
+    "dept": "체육교육학과",
+    "hakbun": "24",
+    "birth": "2004-02-09",
+    "byear": null,
+    "age": 22,
+    "height": null,
+    "weight": null,
+    "from": "",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "rugby",
+    "no": 12,
+    "name": "서보성",
+    "pos": "CTB",
+    "dept": "체육교육학과",
+    "hakbun": "23",
+    "birth": "2004-02-18",
+    "byear": null,
+    "age": 22,
+    "height": null,
+    "weight": null,
+    "from": "",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "rugby",
+    "no": "12·13",
+    "name": "안성민",
+    "pos": "CTB",
+    "dept": "스포츠응용산업학과",
+    "hakbun": "24",
+    "birth": "2004-07-19",
+    "byear": null,
+    "age": 22,
+    "height": null,
+    "weight": null,
+    "from": "",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "rugby",
+    "no": 13,
+    "name": "김지우",
+    "pos": "CTB",
+    "dept": "체육교육학과",
+    "hakbun": "25",
+    "birth": "2006-08-11",
+    "byear": null,
+    "age": 20,
+    "height": null,
+    "weight": null,
+    "from": "",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "rugby",
+    "no": 13,
+    "name": "정은성",
+    "pos": "CTB",
+    "dept": "스포츠응용산업학과",
+    "hakbun": "25",
+    "birth": "2006-03-25",
+    "byear": null,
+    "age": 20,
+    "height": null,
+    "weight": null,
+    "from": "",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "rugby",
+    "no": 14,
+    "name": "박지환",
+    "pos": "WTB",
+    "dept": "체육교육학과",
+    "hakbun": "25",
+    "birth": "2006-06-29",
+    "byear": null,
+    "age": 20,
+    "height": null,
+    "weight": null,
+    "from": "",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "rugby",
+    "no": 15,
+    "name": "이진용",
+    "pos": "FB",
+    "dept": "스포츠응용산업학과",
+    "hakbun": "24",
+    "birth": "2005-03-23",
+    "byear": null,
+    "age": 21,
+    "height": null,
+    "weight": null,
+    "from": "",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "rugby",
+    "no": 15,
+    "name": "지승수",
+    "pos": "FB",
+    "dept": "체육교육학과",
+    "hakbun": "26",
+    "birth": "2007-03-25",
+    "byear": null,
+    "age": 19,
+    "height": null,
+    "weight": null,
+    "from": "",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "soccer",
+    "no": 1,
+    "name": "김현",
+    "pos": "GK",
+    "dept": "체육교육학과",
+    "hakbun": "24",
+    "birth": "2005-03-18",
+    "byear": 2005,
+    "age": 21,
+    "height": 187,
+    "weight": 81,
+    "from": "매탄고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "soccer",
+    "no": 2,
+    "name": "김민성",
+    "pos": "DF",
+    "dept": "체육교육학과",
+    "hakbun": "26",
+    "birth": "2007-05",
+    "byear": 2007,
+    "age": null,
+    "height": 188,
+    "weight": 83,
+    "from": "부평고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "soccer",
+    "no": 3,
+    "name": "김민욱",
+    "pos": "DF",
+    "dept": "스포츠응용산업학과",
+    "hakbun": "24",
+    "birth": "2005-01-05",
+    "byear": 2005,
+    "age": 21,
+    "height": 183,
+    "weight": 77,
+    "from": "진위고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "soccer",
+    "no": 4,
+    "name": "강민서",
+    "pos": "DF",
+    "dept": "체육교육학과",
+    "hakbun": "23",
+    "birth": "2004-04-10",
+    "byear": 2004,
+    "age": 22,
+    "height": 183,
+    "weight": 80,
+    "from": "신평고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "soccer",
+    "no": 5,
+    "name": "박경택",
+    "pos": "DF",
+    "dept": "체육교육학과",
+    "hakbun": "26",
+    "birth": "2007-05",
+    "byear": 2007,
+    "age": null,
+    "height": 184,
+    "weight": 78,
+    "from": "포항제철고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "soccer",
+    "no": 6,
+    "name": "이승민",
+    "pos": "DF",
+    "dept": "체육교육학과",
+    "hakbun": "23",
+    "birth": "2004-01-30",
+    "byear": 2004,
+    "age": 22,
+    "height": 184,
+    "weight": 79,
+    "from": "개성고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "soccer",
+    "no": 7,
+    "name": "김정인",
+    "pos": "FW",
+    "dept": "체육교육학과",
+    "hakbun": "24",
+    "birth": "2005-05-24",
+    "byear": 2005,
+    "age": 21,
+    "height": 173,
+    "weight": 68,
+    "from": "동북고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "soccer",
+    "no": 8,
+    "name": "정성빈",
+    "pos": "MF",
+    "dept": "스포츠응용산업학과",
+    "hakbun": "26",
+    "birth": "2007-02",
+    "byear": 2007,
+    "age": null,
+    "height": 183,
+    "weight": 75,
+    "from": "포항제철고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "soccer",
+    "no": 9,
+    "name": "이정빈",
+    "pos": "FW",
+    "dept": "체육교육학과",
+    "hakbun": "24",
+    "birth": "2005-10",
+    "byear": 2005,
+    "age": null,
+    "height": 179,
+    "weight": 74,
+    "from": "영등포공고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "soccer",
+    "no": 10,
+    "name": "박한선",
+    "pos": "FW",
+    "dept": "스포츠응용산업학과",
+    "hakbun": "26",
+    "birth": "2007-08",
+    "byear": 2007,
+    "age": null,
+    "height": 186,
+    "weight": 80,
+    "from": "경영고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "soccer",
+    "no": 11,
+    "name": "장현빈",
+    "pos": "FW",
+    "dept": "스포츠응용산업학과",
+    "hakbun": "23",
+    "birth": "2004-11",
+    "byear": 2004,
+    "age": null,
+    "height": 178,
+    "weight": 75,
+    "from": "중경고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "soccer",
+    "no": 12,
+    "name": "장하민",
+    "pos": "FW",
+    "dept": "스포츠응용산업학과",
+    "hakbun": "23",
+    "birth": "2004-07",
+    "byear": 2004,
+    "age": null,
+    "height": 176,
+    "weight": 73,
+    "from": "풍생고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "soccer",
+    "no": 13,
+    "name": "신동환",
+    "pos": "DF",
+    "dept": "체육교육학과",
+    "hakbun": "25",
+    "birth": "2006-08-19",
+    "byear": 2006,
+    "age": 20,
+    "height": 181,
+    "weight": 72,
+    "from": "영생고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "soccer",
+    "no": 14,
+    "name": "채인서",
+    "pos": "MF",
+    "dept": "체육교육학과",
+    "hakbun": "25",
+    "birth": "2006-04-27",
+    "byear": 2006,
+    "age": 20,
+    "height": 170,
+    "weight": 64,
+    "from": "포항제철고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "soccer",
+    "no": 15,
+    "name": "강진엽",
+    "pos": "DF",
+    "dept": "스포츠응용산업학과",
+    "hakbun": "23",
+    "birth": "2004-03-04",
+    "byear": 2004,
+    "age": 22,
+    "height": 180,
+    "weight": 73,
+    "from": "덕영고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "soccer",
+    "no": 16,
+    "name": "김슬기",
+    "pos": "MF",
+    "dept": "스포츠응용산업학과",
+    "hakbun": "26",
+    "birth": "2007-02",
+    "byear": 2007,
+    "age": null,
+    "height": 186,
+    "weight": 79,
+    "from": "수원고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "soccer",
+    "no": 17,
+    "name": "정희승",
+    "pos": "FW",
+    "dept": "체육교육학과",
+    "hakbun": "26",
+    "birth": "2007-04",
+    "byear": 2007,
+    "age": null,
+    "height": 176,
+    "weight": 65,
+    "from": "장훈고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "soccer",
+    "no": 18,
+    "name": "최지웅",
+    "pos": "MF",
+    "dept": "스포츠응용산업학과",
+    "hakbun": "23",
+    "birth": "2004-03",
+    "byear": 2004,
+    "age": null,
+    "height": 171,
+    "weight": 65,
+    "from": "중경고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "soccer",
+    "no": 19,
+    "name": "박준혁",
+    "pos": "MF",
+    "dept": "스포츠응용산업학과",
+    "hakbun": "24",
+    "birth": "2005-07",
+    "byear": 2005,
+    "age": null,
+    "height": 173,
+    "weight": 67,
+    "from": "수원FC U18",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "soccer",
+    "no": 20,
+    "name": "김동화",
+    "pos": "DF",
+    "dept": "체육교육학과",
+    "hakbun": "25",
+    "birth": "2006-05-11",
+    "byear": 2006,
+    "age": 20,
+    "height": 183,
+    "weight": 73,
+    "from": "영등포공고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "soccer",
+    "no": 21,
+    "name": "이시헌",
+    "pos": "GK",
+    "dept": "스포츠응용산업학과",
+    "hakbun": "25",
+    "birth": "2006-01",
+    "byear": 2006,
+    "age": null,
+    "height": 187,
+    "weight": 75,
+    "from": "경북미용예술고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "soccer",
+    "no": 22,
+    "name": "이현기",
+    "pos": "DF",
+    "dept": "체육교육학과",
+    "hakbun": "26",
+    "birth": "2007-01",
+    "byear": 2007,
+    "age": null,
+    "height": 176,
+    "weight": 71,
+    "from": "신평고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "soccer",
+    "no": 23,
+    "name": "이건희",
+    "pos": "MF",
+    "dept": "스포츠응용산업학과",
+    "hakbun": "25",
+    "birth": "2006-01-09",
+    "byear": 2006,
+    "age": 20,
+    "height": 183,
+    "weight": 73,
+    "from": "김천상무 U18",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "soccer",
+    "no": 24,
+    "name": "강성주",
+    "pos": "FW",
+    "dept": "스포츠응용산업학과",
+    "hakbun": "26",
+    "birth": "2007-02",
+    "byear": 2007,
+    "age": null,
+    "height": 170,
+    "weight": 65,
+    "from": "경기관광고",
+    "photo": "",
+    "note": ""
+  },
+  {
+    "sport": "soccer",
+    "no": 25,
+    "name": "송수형",
+    "pos": "DF",
+    "dept": "스포츠응용산업학과",
+    "hakbun": "25",
+    "birth": "2006-04",
+    "byear": 2006,
+    "age": null,
+    "height": 186,
+    "weight": 79,
+    "from": "중경고",
+    "photo": "",
+    "note": ""
+  }
+],
+
+  // 경기 결과. score: [연세, 상대]. video: 다시보기 영상 링크(있으면 ▶ 버튼 표시)
+  results: [
+    // 2026 정기 연고전 실제 결과 (출처: 연세춘추, 고대신문)
+    {comp:'yonko', date:'2026-10-02', sport:'baseball',   opp:'고려대', score:[0,2],   venue:'잠실야구장'},
+    {comp:'yonko', date:'2026-10-02', sport:'basketball', opp:'고려대', score:[53,69], venue:'잠실학생체육관'},
+    {comp:'yonko', date:'2026-10-03', sport:'rugby',      opp:'고려대', score:[11,35], venue:'목동종합운동장'},
+    {comp:'yonko', date:'2026-10-03', sport:'soccer',     opp:'고려대', score:[2,1],   venue:'목동종합운동장'},
+    {comp:'yonko', date:'2026-10-03', sport:'hockey',     opp:'고려대', score:[2,1],   venue:'목동아이스링크'},
+    // 2025 하키·축구, 2026 리그 야구(왕중왕전 결승)는 실제 결과. sample:true 는 예시 데이터 — 실제 결과로 교체하세요
+    {comp:'yonko', date:'2025-09-19', sport:'hockey',     opp:'고려대', score:[6,0],   venue:'목동아이스링크'},
+    {comp:'yonko', date:'2025-09-20', sport:'soccer',     opp:'고려대', score:[2,0],   venue:'—'},
+    {comp:'yonko', date:'2025-09-19', sport:'baseball',   opp:'고려대', score:[2,4],   venue:'잠실야구장', sample:true},
+    {comp:'yonko', date:'2025-09-19', sport:'basketball', opp:'고려대', score:[60,72], venue:'잠실학생체육관', sample:true},
+    {comp:'yonko', date:'2025-09-20', sport:'rugby',      opp:'고려대', score:[24,17], venue:'잠실종합운동장', sample:true},
+    {comp:'league', date:'2026-11-08', sport:'soccer',     opp:'단국대', score:[3,1], venue:'신촌 대운동장', sample:true},
+    {comp:'league', date:'2026-11-04', sport:'basketball', opp:'건국대', score:[88,70], venue:'연세대 체육관', sample:true},
+    {comp:'league', date:'2026-10-25', sport:'soccer',     opp:'용인대', score:[0,1], venue:'용인대 운동장', sample:true},
+    {comp:'league', date:'2026-10-18', sport:'basketball', opp:'고려대', score:[77,80], venue:'고려대 화정체육관', sample:true},
+    {comp:'league', date:'2026-10-11', sport:'rugby',      opp:'한국체대', score:[19,19], venue:'신촌 대운동장', sample:true},
+    {comp:'league', date:'2026-09-10', sport:'baseball',   opp:'중앙대', score:[7,1], venue:'목동야구장'},
+  ],
+};
+
+/* 구역 색상 (연세대 구역마다 다른 파란 계열) */
+const SEC_COLORS = ['#0b2a5b','#1f5fbf','#3f8ae0','#2a6f97','#1b998b','#5c4dd6','#0369a1','#7c3aed','#0f766e','#2563eb'];
+const AWAY = '#f3c4c4', NEUTRAL = '#c9d3e3';
+const GATE_COLOR = {reentry:'#1f9d55', noreentry:'#d64545', entry:'#1f5fbf'};
+const GATE_TEXT  = {reentry:'재입장 가능', noreentry:'재입장 불가 · 퇴장 전용', entry:'입장 전용'};
+
+/* ---------- helpers ---------- */
+const $ = s => document.querySelector(s);
+const sportOf = id => DATA.sports.find(s=>s.id===id) || {name:id, emoji:''};
+const venueOf = id => DATA.venues.find(v=>v.id===id);
+const pad = n => String(n).padStart(2,'0');
+const DOW = ['일','월','화','수','목','금','토'];
+const fmtDate = d => `${d.getMonth()+1}.${pad(d.getDate())} (${DOW[d.getDay()]})`;
+const fmtTime = d => `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+const dday = d => {
+  const a = new Date(); a.setHours(0,0,0,0);
+  const b = new Date(d); b.setHours(0,0,0,0);
+  const n = Math.round((b-a)/864e5);
+  return n===0 ? 'D-DAY' : n>0 ? `D-${n}` : `D+${-n}`;
+};
+const compPill = c => c==='yonko' ? '<span class="pill yk">🦅 연고전</span>' : '<span class="pill lg">🏆 대학리그</span>';
+const esc = s => String(s??'').replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const store = { get(k,d){try{return localStorage.getItem(k)??d}catch(e){return d}}, set(k,v){try{localStorage.setItem(k,v)}catch(e){}} };
+// 다른 페이지 안에 끼워져 열린 경우(다운로드 불가)에는 파일 저장 버튼을 숨김
+let inFrame=false; try{ inFrame = window.self!==window.top; }catch(e){ inFrame=true; }
+const ytSearch = q => 'https://www.youtube.com/results?search_query='+encodeURIComponent(q);
+
+// 구글 캘린더 알림 링크 (예매 오픈 시각, 30분 일정)
+function calLink(g){
+  const o = new Date(g.ticketOpen), e = new Date(o.getTime()+30*60000);
+  const f = d => `${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}T${pad(d.getHours())}${pad(d.getMinutes())}00`;
+  const s = sportOf(g.sport);
+  const p = new URLSearchParams({action:'TEMPLATE', text:`🎟 ${g.comp==='yonko'?'연고전':'대학리그'} ${s.name} 예매 오픈`, dates:`${f(o)}/${f(e)}`, ctz:'Asia/Seoul',
+    details:`연세대 vs ${g.opp} · ${fmtDate(new Date(g.date))} ${fmtTime(new Date(g.date))} · ${g.venue}${g.ticketUrl?'\n예매: '+g.ticketUrl:''}`});
+  return 'https://calendar.google.com/calendar/render?'+p.toString();
+}
+
+// 티켓 영역: 안내(글자)와 버튼(누르는 것)을 분리
+function ticketHtml(g, dark=false){
+  const now = new Date(), cls = dark?'info onDark':'info';
+  if (g.free) return {info:`<span class="${cls}">ⓘ <b>무료 입장</b> · 학생증 지참</span>`, btn:''};
+  if (g.ticketOpen && new Date(g.ticketOpen) > now){
+    const o = new Date(g.ticketOpen);
+    return {info:`<span class="${cls}">🎟 예매 오픈 <b>${o.getMonth()+1}/${o.getDate()} ${fmtTime(o)}</b></span>`,
+            btn:`<a class="btn ${dark?'white':'line'} sm" href="${calLink(g)}" target="_blank" rel="noopener">🔔 오픈 알림</a>`};
+  }
+  if (g.ticketUrl) return {info:`<span class="${cls}">🎟 <b>예매 중</b></span>`, btn:`<a class="btn ${dark?'white':'blue'} sm" href="${esc(g.ticketUrl)}" target="_blank" rel="noopener">예매하기</a>`};
+  return {info:`<span class="${cls}">🎟 예매 정보 준비 중</span>`, btn:''};
+}
+function venueBtn(g, dark=false){
+  return g.venueId ? `<a class="btn ${dark?'ghost':'soft'} sm" href="#guide" data-venue="${g.venueId}">📍 경기장 안내</a>` : '';
+}
+
+// 중계: streamUrl이 있으면 그 링크, 없으면 경기 당일·전날에만 유튜브 검색 링크
+function streamBtn(g, dark=false, always=false){
+  const d = new Date(g.date), today = new Date(); today.setHours(0,0,0,0);
+  const days = Math.round((new Date(d.getFullYear(),d.getMonth(),d.getDate()) - today)/864e5);
+  if(!g.streamUrl && !always && days>1) return '';
+  const url = g.streamUrl || ytSearch(`연세대 ${g.opp} ${sportOf(g.sport).name} 중계`);
+  return `<a class="btn ${dark?'white':'red'} sm" href="${esc(url)}" target="_blank" rel="noopener">📺 ${g.streamUrl?'생중계':'중계 찾기'}</a>`;
+}
+
+/* ---------- HOME ---------- */
+const homeState = {comp:'all', sport:'all', more:false, notices:false};
+const SCHED_LIMIT = 5, NOTICE_LIMIT = 2;
+function upcoming(){ const now=new Date(); now.setHours(0,0,0,0); return DATA.schedule.filter(g=>new Date(g.date)>=now).sort((a,b)=>new Date(a.date)-new Date(b.date)); }
+
+function renderNext(){
+  const g = upcoming()[0], el = $('#nextGame');
+  if(!g){ el.innerHTML = '<div class="row1"><span class="lbl">다음 경기</span></div><div class="match">예정된 경기가 없습니다</div>'; return; }
+  const d = new Date(g.date), s = sportOf(g.sport), t = ticketHtml(g, true);
+  el.classList.toggle('lg', g.comp!=='yonko');
+  el.innerHTML = `
+    <div class="row1"><span class="lbl">NEXT MATCH · ${g.comp==='yonko'?'🦅 연고전':'🏆 대학리그'}</span><span class="dday">${dday(d)}</span></div>
+    <div class="match">${s.emoji} 연세대 vs ${esc(g.opp)}</div>
+    <div class="meta">${s.name} · ${esc(g.round||'')}<br>${fmtDate(d)} ${fmtTime(d)} · ${esc(g.venue)}</div>
+    <div class="acts">${t.info}${t.btn}${streamBtn(g,true,true)}${venueBtn(g,true)}</div>`;
+}
+
+function renderSportSeg(){
+  $('#sportSeg').innerHTML = [{id:'all',name:'전 종목',emoji:''}, ...DATA.sports]
+    .map(s=>`<button data-s="${s.id}" class="${homeState.sport===s.id?'on':''}">${s.emoji} ${s.name}</button>`).join('');
+}
+function gameRow(g){
+  const d=new Date(g.date), s=sportOf(g.sport), t=ticketHtml(g);
+  return `<div class="game ${g.comp==='yonko'?'yk':'lg'}">
+    <div class="date"><b>${d.getMonth()+1}.${pad(d.getDate())}</b><span>${DOW[d.getDay()]} ${fmtTime(d)}</span></div>
+    <div>
+      <div class="t">${s.emoji} vs ${esc(g.opp)} ${compPill(g.comp)}</div>
+      <div class="m">${s.name} · ${esc(g.round||'')} · ${esc(g.venue)}</div>
+    </div>
+    <div class="right"><span style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><span class="dd">${dday(d)}</span>${t.info}</span><span class="acts">${t.btn}${streamBtn(g)}${venueBtn(g)}</span></div>
+  </div>`;
+}
+function renderSchedule(){
+  const list = upcoming().filter(g=>(homeState.comp==='all'||g.comp===homeState.comp)&&(homeState.sport==='all'||g.sport===homeState.sport));
+  $('#schedTitle').textContent = homeState.comp==='yonko' ? '🦅 연고전 일정' : homeState.comp==='league' ? '🏆 대학리그 · 비정기전 일정' : '다가오는 경기';
+  document.querySelectorAll('#compSeg button').forEach(b=>b.classList.toggle('on', b.dataset.c===homeState.comp));
+  document.querySelectorAll('.portal').forEach(p=>p.classList.toggle('active', p.dataset.comp===homeState.comp));
+  renderSportSeg();
+  if(!list.length){ $('#schedList').innerHTML = '<div class="empty">조건에 맞는 예정 경기가 없습니다.</div>'; return; }
+  const yk = list.filter(g=>g.comp==='yonko'), lg = list.filter(g=>g.comp!=='yonko');
+  const groups = [];
+  if(yk.length) groups.push({k:'yk', head:'🦅 연고전 (정기전) <small>vs 고려대</small>', items:yk});
+  if(lg.length) groups.push({k:'lg', head:'🏆 대학리그 · 비정기전 <small>vs 여러 대학</small>', items:lg});
+  // 날짜가 가까운 그룹을 위에
+  groups.sort((a,b)=>new Date(a.items[0].date)-new Date(b.items[0].date));
+  // 첫 화면은 5경기까지만, 나머지는 '더보기'
+  let left = homeState.more ? Infinity : SCHED_LIMIT, h = '';
+  for(const gr of groups){
+    if(left<=0) break;
+    const shown = gr.items.slice(0,left); left -= shown.length;
+    h += `<div class="grp-h ${gr.k}">${gr.head}</div>` + shown.map(gameRow).join('');
+  }
+  if(list.length > SCHED_LIMIT) h += `<button class="more" id="schedMore">${homeState.more?'접기 ▲':`경기 ${list.length-SCHED_LIMIT}개 더보기 ▼`}</button>`;
+  $('#schedList').innerHTML = h;
+}
+
+function renderNotices(){
+  const list = homeState.notices ? DATA.notices : DATA.notices.slice(0, NOTICE_LIMIT);
+  $('#notices').innerHTML = list.map((n,i)=>`
+    <button class="notice" data-i="${i}"><span class="k ${n.type}">${n.label}</span><span>${esc(n.title)}</span><span class="d">${n.date.slice(5).replace('-','.')}</span></button>`).join('')
+    + (DATA.notices.length > NOTICE_LIMIT ? `<button class="more" id="noticeMore" style="border-top:0;padding:8px 0 0;text-align:left">${homeState.notices?'접기 ▲':`공지 ${DATA.notices.length-NOTICE_LIMIT}개 더보기 ▼`}</button>` : '');
+}
+
+/* ---------- GAMEDAY ---------- */
+function renderGameday(){
+  const G = DATA.gameday;
+  $('#gdTitle').textContent = '📣 ' + G.title;
+  $('#gdSub').textContent = G.sub;
+  $('#gdLiveBtn').href = G.liveUrl;
+  $('#gdUpdated').textContent = G.updated ? '최종 갱신 '+G.updated : '경기 중 운영진이 직접 갱신';
+  const yk = DATA.schedule.filter(g=>g.comp==='yonko');
+  $('#liveList').innerHTML = G.live.map(l=>{
+    const s = sportOf(l.sport), g = yk.find(x=>x.sport===l.sport), d = g && new Date(g.date);
+    const sc = l.score ? `${l.score[0]} : ${l.score[1]}` : '– : –';
+    return `<div class="live"><span class="sp">${s.emoji}</span>
+      <div><div class="nm">${s.name}<span class="st ${l.status}">${l.status}</span></div>
+      <div class="mt">${d?`${fmtDate(d)} ${fmtTime(d)} · ${esc(g.venue)}`:''}</div></div>
+      <div class="sc">${sc}<div class="mt" style="font-weight:500">연세 : 고려</div></div></div>`;
+  }).join('');
+  $('#talk').innerHTML = `<p>생중계를 보면서 다른 학우들과 실시간으로 응원 댓글을 나눠요.</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <a class="btn red" href="${esc(G.talkUrl||G.liveUrl)}" target="_blank" rel="noopener">💬 ${G.talkUrl?'응원톡 참여하기':'생중계 채팅 찾기'}</a>
+      <a class="btn soft" href="${esc(G.liveUrl)}" target="_blank" rel="noopener">📺 생중계 보기</a>
+    </div>`;
+  $('#transport').innerHTML = G.transport.map(t=>`<div class="tr"><b>${esc(t.where)}</b>${esc(t.how)}<small>${esc(t.tip)}</small></div>`).join('');
+  $('#cheers').innerHTML = (G.cheers.length ? G.cheers.map(c=>`<div class="cheer">🎵 <span>${esc(c.title)}</span>${c.url?`<a class="btn soft sm" style="margin-left:auto" href="${esc(c.url)}" target="_blank" rel="noopener">▶ 영상</a>`:''}</div>`).join('')
+      : `<p style="margin:0 0 10px;font-size:14px;color:var(--muted)">응원단 공식 응원 영상으로 미리 동작을 익혀 가세요.</p>`)
+    + `<a class="btn line sm" href="${G.cheerSearch}" target="_blank" rel="noopener">▶ 응원가 영상 찾아보기</a>`;
+  let checked = {}; try{ checked = JSON.parse(store.get('check','{}')); }catch(e){}
+  $('#checklist').innerHTML = G.checklist.map((c,i)=>`<label class="check"><input type="checkbox" data-ck="${i}" ${checked[i]?'checked':''}>${esc(c)}</label>`).join('');
+}
+
+/* ---------- GUIDE ---------- */
+const guideState = { venue: store.get('venue', DATA.venues[0].id), college: store.get('college','') };
+const curVenue = () => venueOf(guideState.venue) || DATA.venues[0];
+const whoOf = s => s.who || [];
+function secColor(s,i,v){
+  if(s.away) return AWAY;
+  if(!whoOf(s).length) return NEUTRAL;
+  const idx = v.sections.filter((x,j)=>j<i && !x.away && whoOf(x).length).length;
+  return SEC_COLORS[idx % SEC_COLORS.length];
+}
+function ringPath(cx,cy,rx1,ry1,rx2,ry2,a0,a1){
+  const pt=(rx,ry,a)=>{const r=(a-90)*Math.PI/180;return [cx+rx*Math.cos(r), cy+ry*Math.sin(r)]};
+  const steps=Math.max(4,Math.ceil(Math.abs(a1-a0)/4)), out=[], inn=[];
+  for(let i=0;i<=steps;i++){const a=a0+(a1-a0)*i/steps; out.push(pt(rx2,ry2,a)); inn.push(pt(rx1,ry1,a));}
+  return 'M'+[...out,...inn.reverse()].map(p=>p.map(v=>v.toFixed(1)).join(',')).join('L')+'Z';
+}
+function angPt(cx,cy,rx,ry,a){const r=(a-90)*Math.PI/180;return [cx+rx*Math.cos(r), cy+ry*Math.sin(r)];}
+// 구역 i의 중심 각도
+function secAngle(v,i){
+  const n=v.sections.length;
+  if(v.layout==='ballpark'){ const step=160/n; return 80-(i+0.5)*step; }
+  return (i+0.5)*360/n;
+}
+const angDist = (a,b) => { const d=Math.abs(((a-b)%360+540)%360-180); return d; };
+
+function mapSvgInner(v){
+  let h='', cx=300, cy=220;
+  if(v.layout==='ballpark'){
+    const hx=300, hy=400, r1=150, r2=190;
+    h += `<path d="M${hx},${hy} L${hx-137},${hy-144} A190,190 0 0 1 ${hx+137},${hy-144} Z" fill="#4caf6a"/>
+      <path d="M${hx},${hy} l-55,-55 l55,-55 l55,55 z" fill="#d9a066" stroke="#fff" stroke-width="2"/>
+      <circle cx="${hx}" cy="${hy-55}" r="6" fill="#e9d2b0"/>`;
+    v.sections.forEach((s,i)=>{
+      const n=v.sections.length, step=160/n, a0=80-(i+1)*step+1, a1=80-i*step-1;
+      const [tx,ty]=angPt(hx,hy,(r1+r2)/2,(r1+r2)/2,(a0+a1)/2);
+      h += secSvg(s,i,v,ringPath(hx,hy,r1,r1,r2,r2,a0,a1),tx,ty);
+    });
+    v.gates.forEach(g=>{ const [gx,gy]=angPt(hx,hy,r2+22,r2+22,g.angle); h += gateSvg(g,gx,gy); });
+    h += `<text x="${hx}" y="${hy+26}" text-anchor="middle" font-size="12" fill="#5b6b85">홈플레이트</text>`;
+    return h;
+  }
+  let rx1,ry1,rx2,ry2,gr;
+  if(v.layout==='stadium'){
+    rx1=170;ry1=110;rx2=270;ry2=195;gr=[288,210];
+    h += `<ellipse cx="${cx}" cy="${cy}" rx="160" ry="100" fill="#d7ecd9"/>
+      <rect x="${cx-120}" y="${cy-62}" width="240" height="124" fill="#4caf6a" rx="4"/>
+      <line x1="${cx}" y1="${cy-62}" x2="${cx}" y2="${cy+62}" stroke="#fff" stroke-width="2"/>
+      <circle cx="${cx}" cy="${cy}" r="18" fill="none" stroke="#fff" stroke-width="2"/>
+      <rect x="${cx-120}" y="${cy-30}" width="26" height="60" fill="none" stroke="#fff" stroke-width="2"/>
+      <rect x="${cx+94}" y="${cy-30}" width="26" height="60" fill="none" stroke="#fff" stroke-width="2"/>`;
+  } else if(v.layout==='rink'){
+    rx1=160;ry1=100;rx2=268;ry2=192;gr=[285,208];
+    h += `<rect x="${cx-140}" y="${cy-72}" width="280" height="144" rx="60" fill="#e9f5fd" stroke="#9cc9ea" stroke-width="3"/>
+      <line x1="${cx}" y1="${cy-72}" x2="${cx}" y2="${cy+72}" stroke="#e05d5d" stroke-width="3"/>
+      <line x1="${cx-50}" y1="${cy-72}" x2="${cx-50}" y2="${cy+72}" stroke="#4a8fd6" stroke-width="3"/>
+      <line x1="${cx+50}" y1="${cy-72}" x2="${cx+50}" y2="${cy+72}" stroke="#4a8fd6" stroke-width="3"/>
+      <circle cx="${cx}" cy="${cy}" r="20" fill="none" stroke="#4a8fd6" stroke-width="2"/>`;
+  } else {
+    rx1=150;ry1=95;rx2=265;ry2=190;gr=[282,206];
+    h += `<rect x="${cx-130}" y="${cy-78}" width="260" height="156" rx="8" fill="#e8c99a"/>
+      <line x1="${cx}" y1="${cy-78}" x2="${cx}" y2="${cy+78}" stroke="#fff" stroke-width="2"/>
+      <circle cx="${cx}" cy="${cy}" r="20" fill="none" stroke="#fff" stroke-width="2"/>
+      <path d="M${cx-130},${cy-50} A50,50 0 0 1 ${cx-130},${cy+50}" fill="none" stroke="#fff" stroke-width="2"/>
+      <path d="M${cx+130},${cy-50} A50,50 0 0 0 ${cx+130},${cy+50}" fill="none" stroke="#fff" stroke-width="2"/>`;
+  }
+  const n=v.sections.length, step=360/n;
+  v.sections.forEach((s,i)=>{
+    const a0=i*step+0.8, a1=(i+1)*step-0.8;
+    const [tx,ty]=angPt(cx,cy,(rx1+rx2)/2,(ry1+ry2)/2,(a0+a1)/2);
+    h += secSvg(s,i,v,ringPath(cx,cy,rx1,ry1,rx2,ry2,a0,a1),tx,ty);
+  });
+  v.gates.forEach(g=>{ const [gx,gy]=angPt(cx,cy,gr[0],gr[1],g.angle); h += gateSvg(g,gx,gy); });
+  return h;
+}
+function secSvg(s,i,v,d,tx,ty){
+  const c = guideState.college, has = c && whoOf(s).includes(c);
+  const cls = c && hasCollegeSeats(v) ? (has?' hl':' dim') : '';
+  const dark = whoOf(s).length && !s.away;
+  return `<g class="sec-path${cls}" data-sec="${i}">
+    <path d="${d}" fill="${secColor(s,i,v)}" stroke="#fff" stroke-width="1.5"/>
+    <text x="${tx.toFixed(1)}" y="${(ty+4).toFixed(1)}" text-anchor="middle" font-size="12" font-weight="700" fill="${dark?'#fff':'#14213d'}" pointer-events="none">${esc(s.label)}</text>
+  </g>`;
+}
+function gateSvg(g,x,y){
+  return `<g class="gate-dot" data-gate="${g.no}">
+    <circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="13" fill="${GATE_COLOR[g.type]}" stroke="#fff" stroke-width="3"/>
+    <text x="${x.toFixed(1)}" y="${(y+4.5).toFixed(1)}" text-anchor="middle" font-size="12" font-weight="900" fill="#fff" pointer-events="none">${g.no}</text>
+  </g>`;
+}
+const hasCollegeSeats = v => v.sections.some(s=>whoOf(s).length);
+const viewBoxOf = v => v.layout==='ballpark' ? '70 150 460 290' : '0 0 600 440';
+
+function renderGuide(){
+  const v = curVenue();
+  $('#venueTabs').innerHTML = DATA.venues.map(x=>`<button class="vt ${x.id===v.id?'on':''}" data-v="${x.id}"><b>${esc(x.name)}</b><small>${esc(x.use)}</small></button>`).join('');
+  $('#mapTitle').textContent = `${v.name} · ${v.use}`;
+  const svg = $('#map'); svg.setAttribute('viewBox', viewBoxOf(v)); svg.innerHTML = mapSvgInner(v);
+  const sel = $('#collegeSel');
+  if(hasCollegeSeats(v)){
+    sel.disabled = false;
+    sel.innerHTML = `<option value="">단과대를 선택하세요 (18개)</option>` + DATA.colleges.map(c=>`<option ${guideState.college===c?'selected':''}>${esc(c)}</option>`).join('');
+  } else {
+    sel.disabled = true;
+    sel.innerHTML = `<option>이 경기장은 단과대 구분 없는 자유석입니다</option>`;
+  }
+  $('#rules').innerHTML = `<h3>🔁 출입 · 재입장 규정</h3>` + v.rules.map(r=>`<div class="rule"><span class="ic ${r.t}">${r.t==='ok'?'✓':r.t==='no'?'✕':'i'}</span><span>${r.s}</span></div>`).join('');
+  $('#gateList').innerHTML = `<h3>🚪 게이트 안내</h3>` + v.gates.map(g=>`
+    <button class="gl" data-gate="${g.no}"><span class="badge" style="background:${GATE_COLOR[g.type]}">${g.no}번</span>
+      <span><b>${GATE_TEXT[g.type]}</b> · ${esc(g.where)}<small>${esc(g.note)}</small></span></button>`).join('');
+  $('#faq').innerHTML = DATA.faq.map(f=>`<details><summary>${esc(f.q)}</summary><p>${esc(f.a)}</p></details>`).join('');
+  if(guideState.college && hasCollegeSeats(v)) showCollege(guideState.college);
+  else $('#mapInfo').innerHTML = hasCollegeSeats(v)
+    ? '<h4>👇 내 단과대를 선택해 보세요</h4><p>지도 아래에서 단과대를 고르면 응원석 구역과 가장 가까운 게이트를 알려드려요. 지도의 구역·게이트를 눌러도 됩니다.</p>'
+    : '<h4>자유석 경기장</h4><p>단과대 구분 없이 원하는 자리에 앉으면 됩니다. 게이트를 누르면 출입 안내가 나와요.</p>';
+}
+function nearestGate(v,i){
+  const a = secAngle(v,i);
+  const cand = v.gates.filter(g=>g.type!=='noreentry' && !g.away);
+  return (cand.length?cand:v.gates.filter(g=>!g.away)).slice().sort((x,y)=>angDist(x.angle,a)-angDist(y.angle,a))[0];
+}
+function showCollege(c){
+  const v = curVenue(), i = v.sections.findIndex(s=>whoOf(s).includes(c));
+  if(i<0){ $('#mapInfo').innerHTML = `<h4>${esc(c)}</h4><p>이 경기장에는 ${esc(c)} 지정 구역이 없습니다. 일반석을 이용하세요.</p>`; return; }
+  const s = v.sections[i], g = nearestGate(v,i);
+  $('#mapInfo').innerHTML = `<h4><span style="display:inline-block;width:12px;height:12px;border-radius:3px;background:${secColor(s,i,v)};margin-right:6px"></span>${esc(c)} → ${esc(s.label)} 구역</h4>
+    <p>함께 앉는 단과대: ${whoOf(s).filter(x=>x!==c).map(esc).join(', ') || '없음'}</p>
+    ${s.detail && s.detail[c] ? `<div class="dept">📚 학과별 위치: ${esc(s.detail[c])}</div>` : ''}
+    ${g ? `<div class="tip">🚪 가장 가까운 게이트: <b>${g.no}번</b> (${GATE_TEXT[g.type]}) · ${esc(g.where)}</div>` : ''}`;
+}
+function showSection(i){
+  const v = curVenue(), s = v.sections[i];
+  const who = s.away ? '상대측 응원석' : whoOf(s).length ? whoOf(s).join(', ') + ' 응원석' : '일반석 (자유석)';
+  const g = !s.away ? nearestGate(v,i) : null;
+  const details = s.detail ? Object.entries(s.detail).map(([k,d])=>`<div class="dept">📚 ${esc(k)}: ${esc(d)}</div>`).join('') : '';
+  $('#mapInfo').innerHTML = `<h4><span style="display:inline-block;width:12px;height:12px;border-radius:3px;background:${secColor(s,i,v)};margin-right:6px"></span>${esc(s.label)} 구역</h4><p>${esc(who)}</p>${details}
+    ${g ? `<div class="tip">🚪 가까운 게이트: <b>${g.no}번</b> (${GATE_TEXT[g.type]})</div>` : ''}`;
+}
+function showGate(no){
+  const g = curVenue().gates.find(x=>x.no==no);
+  $('#mapInfo').innerHTML = `<h4><span style="display:inline-block;background:${GATE_COLOR[g.type]};color:#fff;border-radius:8px;padding:1px 8px;margin-right:6px">${g.no}번</span>${GATE_TEXT[g.type]}</h4><p><b>${esc(g.where)}</b><br>${esc(g.note)}</p>`;
+}
+
+// 좌석 지도를 PNG 이미지로 만들기 (오프라인 대비)
+function saveMapImage(){
+  const v = curVenue(), W=1000, H=1240;
+  const vb = viewBoxOf(v).split(' ').map(Number);
+  const mapH = Math.round(W*vb[3]/vb[2]);
+  const c = guideState.college;
+  const ci = c ? v.sections.findIndex(s=>whoOf(s).includes(c)) : -1;
+  const lines = [];
+  if(ci>=0){ const g=nearestGate(v,ci); lines.push(`🎓 ${c} → ${v.sections[ci].label} 구역`); if(g) lines.push(`🚪 가까운 게이트 ${g.no}번 (${GATE_TEXT[g.type]})`); }
+  v.gates.forEach(g=>lines.push(`${g.no}번 게이트 · ${GATE_TEXT[g.type]} · ${g.where}`));
+  v.rules.forEach(r=>lines.push('• '+r.s.replace(/<[^>]+>/g,'')));
+  const font = `'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif`;
+  const textY0 = 110 + mapH + 40;
+  const totalH = textY0 + lines.length*38 + 60;
+  const svgStr = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${totalH}" viewBox="0 0 ${W} ${totalH}">
+    <rect width="100%" height="100%" fill="#ffffff"/>
+    <rect width="100%" height="90" fill="#0b2a5b"/>
+    <text x="40" y="58" font-family="${font}" font-size="34" font-weight="900" fill="#fff">${esc(v.name)} · ${esc(v.use)}</text>
+    <svg x="20" y="100" width="${W-40}" height="${mapH}" viewBox="${vb.join(' ')}">${mapSvgInner(v)}</svg>
+    ${lines.map((l,k)=>`<text x="40" y="${textY0+k*38}" font-family="${font}" font-size="${k<(ci>=0?2:0)?26:22}" font-weight="${k<(ci>=0?2:0)?900:500}" fill="#14213d">${esc(l)}</text>`).join('')}
+    <text x="40" y="${totalH-24}" font-family="${font}" font-size="18" fill="#5b6b85">연세 스포츠 허브 by 낫아웃</text>
+  </svg>`;
+  const img = new Image();
+  img.onload = () => {
+    let url = '';
+    try{
+      const cv = document.createElement('canvas'); cv.width=W; cv.height=totalH;
+      cv.getContext('2d').drawImage(img,0,0); url = cv.toDataURL('image/png');
+    }catch(e){ url = 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svgStr); }
+    const fname = `좌석지도_${v.name}${c?'_'+c:''}.png`;
+    openModal(`<div class="top" style="display:block"><h3>🖼 좌석 지도 이미지</h3><div style="opacity:.8;font-size:13px">휴대폰: 이미지를 <b>길게 눌러 '사진에 저장'</b> · PC: 아래 버튼 또는 우클릭 저장</div></div>
+      <div class="saveimg"><img src="${url}" alt="좌석 지도"><p>데이터가 안 터지는 경기장에서도 사진첩에서 바로 볼 수 있어요.</p></div>
+      <div style="display:flex;gap:8px;justify-content:flex-end;padding:0 18px 18px">${inFrame?'':`<a class="btn blue sm" href="${url}" download="${fname}">⬇ 파일로 저장</a>`}<button class="btn line sm noarrow" data-close>닫기</button></div>`, true);
+  };
+  img.src = 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svgStr);
+}
+
+/* ---------- PLAYERS ---------- */
+const pState = {sport:'all', q:'', pos:'all'};
+function pcard(p){
+  const s=sportOf(p.sport), idx=DATA.players.indexOf(p);
+  const sub = [p.sport==='rugby'?'':p.pos, p.hakbun ? p.hakbun+'학번' : (p.byear && p.byear+'년생')].filter(Boolean).join(' · ') || '정보 확인 중';
+  // 럭비는 경기마다 포지션별로 번호가 바뀌어 카드엔 포지션, 번호는 상세 정보에서만 표시
+  const hideNo = p.sport==='rugby';
+  const big = hideNo ? `<div class="num posbig" style="${(p.pos||'').length>4?'font-size:20px':''}">${esc(p.pos||'–')}</div>` : `<div class="num ${p.no==null?'none':''}">${p.no??'–'}</div>`;
+  return `<button class="card pcard" data-no="${hideNo?'':(p.no??'')}" data-i="${idx}">
+    <span class="pill sp">${s.emoji} ${s.name}</span>
+    ${big}
+    <div class="nm">${esc(p.name)}</div>
+    <div class="ps">${esc(sub)}</div>
+    ${p.dept?`<div class="meta2">${esc(p.dept)}</div>`:''}
+    ${p.photo?`<img class="ph" src="${esc(p.photo)}" alt="" onerror="this.remove()">`:''}
+  </button>`;
+}
+function renderPlayers(){
+  $('#pSportSeg').innerHTML = [{id:'all',name:'전체',emoji:''},...DATA.sports].map(s=>`<button data-s="${s.id}" class="${pState.sport===s.id?'on':''}">${s.emoji} ${s.name}</button>`).join('');
+  const base = DATA.players.filter(p=>pState.sport==='all'||p.sport===pState.sport);
+  const positions = [...new Set(base.map(p=>p.pos).filter(Boolean))].sort();
+  if(pState.pos!=='all' && !positions.includes(pState.pos)) pState.pos='all';
+  $('#pPos').innerHTML = `<option value="all">전체 포지션</option>`+positions.map(p=>`<option ${pState.pos===p?'selected':''}>${esc(p)}</option>`).join('');
+  const q = pState.q.trim();
+  const list = base.filter(p=>(pState.pos==='all'||p.pos===pState.pos) &&
+      (!q || p.name.includes(q) || String(p.no??'').split('·').includes(q) || (p.dept||'').includes(q)))
+    .sort((a,b)=>(parseInt(a.no??999))-(parseInt(b.no??999)) || a.name.localeCompare(b.name));
+  $('#pCount').textContent = `${list.length}명`;
+  if(!list.length){ $('#players').innerHTML = '<div class="card empty" style="border-top:1px solid var(--line)">검색 결과가 없습니다.</div>'; return; }
+  // 종목별로 구분해서 표시
+  $('#players').innerHTML = DATA.sports.map(s=>{
+    const ps = list.filter(p=>p.sport===s.id); if(!ps.length) return '';
+    return `<div class="sport-block"><div class="sport-h">${s.emoji} ${s.name} <small>${ps.length}명</small>
+      ${pState.sport==='all'?`<button class="btn soft sm" data-onlysport="${s.id}">${s.name}만 보기</button>`:''}</div>
+      <div class="players">${ps.map(pcard).join('')}</div></div>`;
+  }).join('');
+}
+function openPlayer(i){
+  const p = DATA.players[i], s = sportOf(p.sport);
+  const rows = [
+    ['종목', s.name], ['등번호', p.no!=null ? p.no+'번'+(p.sport==='rugby'?' (주 포지션 기준)':'') : (p.sport==='rugby'?'확인 중':'')], ['포지션', p.pos], ['학과', p.dept],
+    ['학번', p.hakbun && p.hakbun+'학번'], ['생년월일', p.birth && p.birth.replaceAll('-','.')],
+    ['나이', p.age!=null ? '만 '+p.age+'세' : ''],
+    ['출생연도', !p.birth && p.byear ? p.byear+'년생' : ''],
+    ['신장/체중', [p.height&&p.height+'cm', p.weight&&p.weight+'kg'].filter(Boolean).join(' / ')],
+    ['출신', p.from],
+  ].filter(r=>r[1]);
+  const avatar = p.photo ? `<div class="avatar"><img src="${esc(p.photo)}" alt="${esc(p.name)}" onerror="this.parentNode.textContent='${esc(p.name[0])}'"></div>` : `<div class="avatar">${esc(p.name[0])}</div>`;
+  openModal(`<div class="top">${avatar}<div><div style="opacity:.75;font-size:13px">${s.emoji} ${s.name}${p.pos?' · '+esc(p.pos):''}</div><h3>${p.no!=null?'<span style="opacity:.6">#'+p.no+'</span> ':''}${esc(p.name)}</h3></div></div>
+    <dl>${rows.map(([k,v])=>`<dt>${k}</dt><dd>${esc(v)}</dd>`).join('')}</dl>
+    ${p.note?`<div class="note">📝 ${esc(p.note)}</div>`:''}
+    <button class="btn line sm noarrow close" data-close>닫기</button>`);
+}
+
+/* ---------- ARCHIVE ---------- */
+const aState = {comp:'all', year:'all', sport:'all'};
+const outcome = r => r.score[0]>r.score[1]?'W':r.score[0]<r.score[1]?'L':'D';
+function videoBtn(r){
+  if(r.sample) return '<span class="info">예시 데이터</span>';
+  if(r.video) return `<a class="btn blue sm" href="${esc(r.video)}" target="_blank" rel="noopener">▶ 다시보기</a>`;
+  const s = sportOf(r.sport);
+  return `<a class="btn soft sm" href="${ytSearch(`${r.date.slice(0,4)} ${r.comp==='yonko'?'연고전':'연세대 '+r.opp} ${s.name}`)}" target="_blank" rel="noopener">🔎 영상 찾기</a>`;
+}
+function renderArchive(){
+  $('#aSportSeg').innerHTML = [{id:'all',name:'전 종목',emoji:''},...DATA.sports].map(s=>`<button data-s="${s.id}" class="${aState.sport===s.id?'on':''}">${s.emoji} ${s.name}</button>`).join('');
+  const years = [...new Set(DATA.results.map(r=>r.date.slice(0,4)))].sort().reverse();
+  $('#aYear').innerHTML = `<option value="all">전체 연도</option>`+years.map(y=>`<option value="${y}" ${aState.year===y?'selected':''}>${y}년</option>`).join('');
+  document.querySelectorAll('#aCompSeg button').forEach(b=>b.classList.toggle('on',b.dataset.c===aState.comp));
+  const list = DATA.results.filter(r=>(aState.comp==='all'||r.comp===aState.comp)&&(aState.year==='all'||r.date.startsWith(aState.year))&&(aState.sport==='all'||r.sport===aState.sport))
+    .sort((a,b)=>b.date.localeCompare(a.date));
+  const tally = arr => { const w=arr.filter(r=>outcome(r)==='W').length, l=arr.filter(r=>outcome(r)==='L').length, d=arr.filter(r=>outcome(r)==='D').length; return {w,l,d,rate:(w+l+d)?Math.round(w/(w+l+d)*100):0}; };
+  const T = tally(list);
+  $('#aSummary').innerHTML = [
+    ['경기 수', list.length], ['승', `<span style="color:var(--win)">${T.w}</span>`], ['패 / 무', `<span style="color:var(--lose)">${T.l}</span> / ${T.d}`], ['승률', T.rate+'%']
+  ].map(([l,v])=>`<div class="card stat"><div class="v">${v}</div><div class="l">${l}</div></div>`).join('');
+
+  const showBand = aState.comp!=='league' && aState.sport==='all';
+  $('#yearBandCard').style.display = showBand ? '' : 'none';
+  if(showBand){
+    const yk = DATA.results.filter(r=>r.comp==='yonko');
+    const yrs = [...new Set(yk.map(r=>r.date.slice(0,4)))].sort().reverse();
+    $('#yearBand').innerHTML = `<div style="width:100%;font-weight:900;font-size:15px;margin-bottom:2px">🦅 연고전 연도별 한눈에 보기</div>` + yrs.map(y=>{
+      const rs = DATA.sports.map(s=>yk.find(r=>r.date.startsWith(y)&&r.sport===s.id));
+      const t = tally(rs.filter(Boolean));
+      const verdict = t.w>t.l ? '<b style="color:var(--win)">연세대 우세</b>' : t.w<t.l ? '<b style="color:var(--lose)">고려대 우세</b>' : '<b>무승부</b>';
+      return `<div class="yb"><b>${y}</b><div class="dots">${rs.map((r,i)=>r?`<span class="res ${outcome(r)}" title="${DATA.sports[i].name} ${r.score.join(':')}">${DATA.sports[i].emoji}</span>`:'<span style="background:#dfe6f1"></span>').join('')}</div><div class="tot">${t.w}승 ${t.d}무 ${t.l}패 · ${verdict}</div></div>`;
+    }).join('');
+  }
+  if(!list.length){ $('#aBlocks').innerHTML = `<div class="card empty" style="border-top:1px solid var(--line)">해당 조건의 경기 결과가 없습니다.</div>`; return; }
+  // 종목별 블록
+  $('#aBlocks').innerHTML = DATA.sports.map(s=>{
+    const rs = list.filter(r=>r.sport===s.id); if(!rs.length) return '';
+    const t = tally(rs);
+    return `<div class="card arch-block"><div class="bh">${s.emoji} ${s.name} <small>${rs.length}경기 · ${t.w}승 ${t.d}무 ${t.l}패 · 승률 ${t.rate}%</small></div>
+      <div class="tablewrap"><table><thead><tr><th>날짜</th><th>대회</th><th>상대</th><th>스코어</th><th>결과</th><th class="hide-m">장소</th><th>영상</th></tr></thead><tbody>
+      ${rs.map(r=>{ const o=outcome(r); return `<tr><td>${r.date.replaceAll('-','.')}${r.sample?' <span class="pill" style="background:#fff3cd;color:#8a6100">예시</span>':''}</td><td>${compPill(r.comp)}</td><td>${esc(r.opp)}</td>
+        <td class="score">${r.score[0]} : ${r.score[1]}</td><td><span class="res ${o}">${o==='W'?'승':o==='L'?'패':'무'}</span></td><td class="hide-m" style="color:var(--muted)">${esc(r.venue)}</td><td>${videoBtn(r)}</td></tr>`; }).join('')}
+      </tbody></table></div></div>`;
+  }).join('');
+}
+
+/* ---------- modal ---------- */
+function openModal(html, wide=false){ const m=$('#modalInner'); m.innerHTML = html; m.classList.toggle('wide', wide); $('#modal').classList.add('on'); }
+function closeModal(){ $('#modal').classList.remove('on'); }
+
+/* ---------- routing ---------- */
+const VIEWS = ['home','gameday','guide','players','archive'];
+function route(){
+  const v = VIEWS.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'home';
+  document.querySelectorAll('section.view').forEach(s=>s.classList.toggle('on', s.id==='v-'+v));
+  document.querySelectorAll('#tabs a').forEach(a=>a.classList.toggle('on', a.dataset.v===v));
+  window.scrollTo(0,0);
+}
+
+/* ---------- events ---------- */
+document.addEventListener('click', e=>{
+  const t = e.target;
+  const venueLink = t.closest('[data-venue]');
+  if(venueLink){ guideState.venue = venueLink.dataset.venue; store.set('venue',guideState.venue); renderGuide(); }
+
+  const portal = t.closest('.portal');
+  if(portal){ homeState.comp = portal.dataset.comp; homeState.sport='all'; renderSchedule(); $('#schedCard').scrollIntoView({behavior:'smooth',block:'start'}); }
+  const cs = t.closest('#compSeg button'); if(cs){ homeState.comp=cs.dataset.c; renderSchedule(); }
+  const ss = t.closest('#sportSeg button'); if(ss){ homeState.sport=ss.dataset.s; renderSchedule(); }
+  if(t.closest('#schedMore')){ homeState.more=!homeState.more; renderSchedule(); }
+  if(t.closest('#noticeMore')){ homeState.notices=!homeState.notices; renderNotices(); }
+  const nt = t.closest('.notice'); if(nt){ const n=DATA.notices[nt.dataset.i];
+    openModal(`<div class="top" style="display:block"><span class="k ${n.type}" style="font-size:11px;font-weight:700;padding:2px 7px;border-radius:6px">${n.label}</span><h3 style="margin-top:8px">${esc(n.title)}</h3><div style="opacity:.7;font-size:13px">${n.date}</div></div><p style="padding:18px 22px;margin:0;font-size:15px">${esc(n.body)}</p><button class="btn line sm noarrow close" data-close>닫기</button>`); }
+
+  const vt = t.closest('.vt'); if(vt){ guideState.venue=vt.dataset.v; store.set('venue',guideState.venue); renderGuide(); }
+  const sec = t.closest('.sec-path'); if(sec) showSection(+sec.dataset.sec);
+  const gate = t.closest('[data-gate]'); if(gate) showGate(gate.dataset.gate);
+  if(t.closest('#saveMap')) saveMapImage();
+
+  const ps = t.closest('#pSportSeg button'); if(ps){ pState.sport=ps.dataset.s; renderPlayers(); }
+  const only = t.closest('[data-onlysport]'); if(only){ pState.sport=only.dataset.onlysport; renderPlayers(); window.scrollTo({top:0,behavior:'smooth'}); return; }
+  const pc = t.closest('.pcard'); if(pc) openPlayer(+pc.dataset.i);
+
+  const as = t.closest('#aSportSeg button'); if(as){ aState.sport=as.dataset.s; renderArchive(); }
+  const ac = t.closest('#aCompSeg button'); if(ac){ aState.comp=ac.dataset.c; renderArchive(); }
+
+  if(t.closest('[data-close]') || t.id==='modal') closeModal();
+});
+document.addEventListener('change', e=>{
+  const ck = e.target.closest('[data-ck]');
+  if(ck){ let c={}; try{c=JSON.parse(store.get('check','{}'))}catch(_){}; c[ck.dataset.ck]=ck.checked; store.set('check',JSON.stringify(c)); }
+});
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeModal(); });
+$('#collegeSel').addEventListener('change', e=>{ guideState.college=e.target.value; store.set('college',guideState.college); renderGuide(); });
+$('#pSearch').addEventListener('input', e=>{ pState.q=e.target.value; renderPlayers(); });
+$('#pPos').addEventListener('change', e=>{ pState.pos=e.target.value; renderPlayers(); });
+$('#aYear').addEventListener('change', e=>{ aState.year=e.target.value; renderArchive(); });
+window.addEventListener('hashchange', route);
+
+/* ---------- init ---------- */
+renderNext(); renderSchedule(); renderNotices(); renderGameday(); renderGuide(); renderPlayers(); renderArchive(); route();
+</script>
+</body>
+</html>
